@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
+
+QMAKE_CXXFLAGS += -std=c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +15,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    database.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    database.h
 
 FORMS    += mainwindow.ui
+
+TRANSLATIONS += linguas_ru.ts
+
+include(students/students.pri)
+include(groups/groups.pri)
+include(progress/progress.pri)
+include(troops/troops.pri)
