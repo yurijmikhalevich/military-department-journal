@@ -14,6 +14,7 @@ class TroopsWidget : public QWidget
 public:
     explicit TroopsWidget(QWidget *parent = 0);
     ~TroopsWidget();
+    void enable();
     
 private:
     Ui::TroopsWidget *ui;

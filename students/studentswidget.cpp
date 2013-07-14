@@ -35,10 +35,10 @@ void StudentsWidget::enable()
     model->setHeaderData(9, Qt::Horizontal, tr("Decree of expulsion"));
 //    model->setHeaderData(10, Qt::Horizontal, tr("Expulsion reason"));
 //    model->setHeaderData(11, Qt::Horizontal, tr("Expulsed from"));
-    model->setHeaderData(12, Qt::Horizontal, tr("YGU", "Year of graduation from university"));
-    model->setHeaderData(13, Qt::Horizontal, tr("YGM", "Year of graduation from Faculty of Military Training"));
-    model->setHeaderData(14, Qt::Horizontal, tr("Graduated"));
-    model->setHeaderData(15, Qt::Horizontal, tr("Troop"));
+//    model->setHeaderData(12, Qt::Horizontal, tr("YGU", "Year of graduation from university"));
+//    model->setHeaderData(13, Qt::Horizontal, tr("YGM", "Year of graduation from Faculty of Military Training"));
+//    model->setHeaderData(12, Qt::Horizontal, tr("Graduated"));
+    model->setHeaderData(12, Qt::Horizontal, tr("Troop"));
     model->select();
     ui->tableView->setModel(model);
     ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));

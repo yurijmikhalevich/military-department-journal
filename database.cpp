@@ -34,6 +34,7 @@ bool Database::init(QString fileName, bool test)
             "CREATE TABLE university_group ("
             "  id INTEGER PRIMARY KEY,"
             "  name TEXT NOT NULL,"
+            "  graduated_from_university_in INTEGER"
 //            "  department_id INTEGER REFERENCES university_department (id) NOT NULL"
             ");"
             "CREATE TABLE expulsion_reason ("
@@ -59,8 +60,9 @@ bool Database::init(QString fileName, bool test)
             "CREATE TABLE troop ("
             "  id INTEGER PRIMARY KEY,"
             "  name TEXT NOT NULL,"
-            "  graduated BOOLEAN DEFAULT FALSE NOT NULL,"
-            "  year_of_training INTEGER NOT NULL,"
+            "  year_of_training INTEGER DEFAULT 1,"
+            "  graduated_from_in INTEGER,"
+            "  graduated BOOLEAN DEFAULT FALSE,"
             "  curator_id INTEGER REFERENCES teacher (id)"
             ");"
             "CREATE TABLE student ("
@@ -68,17 +70,18 @@ bool Database::init(QString fileName, bool test)
             "  lastname TEXT NOT NULL,"
             "  firstname TEXT NOT NULL,"
             "  middlename TEXT NOT NULL,"
-            "  lastname_datum TEXT NOT NULL,"
-            "  firstname_datum TEXT NOT NULL,"
-            "  middlename_datum TEXT NOT NULL,"
+            "  lastname_datum TEXT,"
+            "  firstname_datum TEXT,"
+            "  middlename_datum TEXT,"
+            "  lastname_accusative TEXT,"
+            "  firstname_accusative TEXT,"
+            "  middlename_accusative TEXT,"
+            "  dob DATE,"
             "  university_group_id INTEGER REFERENCES university_group (id),"
             "  decree_enrollment_number TEXT,"
             "  decree_expulsion_number TEXT,"
             "  expulsion_reason_id INTEGER REFERENCES expulsion_reason (id),"
             "  expulsed_from_id INTEGER REFERENCES expulsed_from (id),"
-            "  graduated_from_university_in INTEGER,"
-            "  graduated_from_department_in INTEGER,"
-            "  graduated_from_department BOOLEAN,"
             "  troop_id INTEGER REFERENCES troop (id)"
             ");"
             "CREATE TABLE subject ("
@@ -110,12 +113,12 @@ bool Database::init(QString fileName, bool test)
     }
     if (test) {
         QSqlQuery *query = new QSqlQuery(db);
-        if (!query->exec("INSERT INTO university_department (name) VALUES ('Applied informatics')")) {
-            return false;
-        }
-        QVariant id = query->lastInsertId();
-        query->prepare("INSERT INTO university_group (name, department_id) VALUES ('AI-0904', ?)");
-        query->addBindValue(id);
+//        if (!query->exec("INSERT INTO university_department (name) VALUES ('Applied informatics')")) {
+//            return false;
+//        }
+//        QVariant id = query->lastInsertId();
+        QVariant id;
+        query->prepare("INSERT INTO university_group (name) VALUES ('AI-0904')");
         if (!query->exec()) {
             return false;
         }

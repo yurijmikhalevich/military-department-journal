@@ -7,6 +7,7 @@
 
 #include "database.h"
 #include "students/studentswidget.h"
+#include "troops/troopswidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     studentsWidget = new StudentsWidget(ui->tabWidget);
     connect(ui->globalSearch, SIGNAL(textChanged(QString)), studentsWidget, SLOT(globalSearchQueryChanged(QString)));
     ui->tabWidget->addTab(studentsWidget, tr("Students"));
+    troopsWidget = new TroopsWidget(ui->tabWidget);
+    ui->tabWidget->addTab(troopsWidget, tr("Troops"));
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +40,7 @@ void MainWindow::on_action_New_triggered()
     qDebug() << Database::init(fileName, true);
     ui->centralWidget->setEnabled(true);
     studentsWidget->enable();
+    troopsWidget->enable();
 }
 
 void MainWindow::on_action_Open_triggered()
@@ -49,4 +53,5 @@ void MainWindow::on_action_Open_triggered()
     qDebug() << Database::open(fileName);
     ui->centralWidget->setEnabled(true);
     studentsWidget->enable();
+    troopsWidget->enable();
 }
