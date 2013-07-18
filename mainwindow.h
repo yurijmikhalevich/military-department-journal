@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include "students/studentswidget.h"
-#include "troops/troopswidget.h"
+#include "studentswidget.h"
+#include "troopswidget.h"
 
 namespace Ui {
 class MainWindow;

@@ -16,17 +16,26 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    database.cpp
+    database.cpp \
+    teachersmodel.cpp \
+    teacherswidget.cpp \
+    troopswidget.cpp \
+    sqlrelationaltroopmodel.cpp \
+    studentswidget.cpp
 
 HEADERS  += mainwindow.h \
-    database.h
+    database.h \
+    teachersmodel.h \
+    teacherswidget.h \
+    troopswidget.h \
+    sqlrelationaltroopmodel.h \
+    studentswidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    teacherswidget.ui \
+    troopswidget.ui \
+    studentswidget.ui
 
 TRANSLATIONS += linguas_ru.ts
 
-include(students/students.pri)
-include(groups/groups.pri)
-include(progress/progress.pri)
-include(troops/troops.pri)
-include(teachers/teachers.pri)
+include(qt4table-steroids/qt4table-steroids.pri)

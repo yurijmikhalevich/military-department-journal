@@ -1,0 +1,3 @@
+[submodule "qt4table-steroids"]
+	path = qt4table-steroids
+	url = git@github.com:39dotyt/qt4table-steroids.git

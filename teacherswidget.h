@@ -14,9 +14,16 @@ class TeachersWidget : public QWidget
 public:
     explicit TeachersWidget(QWidget *parent = 0);
     ~TeachersWidget();
+
+signals:
+    void queryChanged(QString query);
     
 private:
     Ui::TeachersWidget *ui;
+
+private slots:
+    void addRow();
+    void on_addTeacher_clicked();
 };
 
 #endif // TEACHERSWIDGET_H
