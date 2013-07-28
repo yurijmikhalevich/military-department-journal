@@ -14,22 +14,26 @@ TARGET = military-department-journal
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
+SOURCES += main.cpp \
+    mainwindow.cpp \
     database.cpp \
-    teachersmodel.cpp \
     teacherswidget.cpp \
     troopswidget.cpp \
     sqlrelationaltroopmodel.cpp \
-    studentswidget.cpp
+    studentswidget.cpp \
+    universitygroupwidget.cpp \
+    universitygroupmodel.cpp \
+    teachermodel.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
-    teachersmodel.h \
     teacherswidget.h \
     troopswidget.h \
     sqlrelationaltroopmodel.h \
-    studentswidget.h
+    studentswidget.h \
+    universitygroupwidget.h \
+    universitygroupmodel.h \
+    teachermodel.h
 
 FORMS    += mainwindow.ui \
     teacherswidget.ui \
@@ -37,5 +41,9 @@ FORMS    += mainwindow.ui \
     studentswidget.ui
 
 TRANSLATIONS += linguas_ru.ts
+
+OTHER_FILES = \
+    README.md \
+    LICENSE.md
 
 include(qt4table-steroids/qt4table-steroids.pri)

@@ -1,16 +1,16 @@
-#ifndef TEACHERSMODEL_H
-#define TEACHERSMODEL_H
+#ifndef TEACHERMODEL_H
+#define TEACHERMODEL_H
 
 #include <QSqlTableModel>
 #include <QHash>
 
 #include "qt4table-steroids/steroidsmodel.h"
 
-class TeachersModel : public SteroidsModel<QSqlTableModel>
+class TeacherModel : public SteroidsModel<QSqlTableModel>
 {
     Q_OBJECT
 public:
-    explicit TeachersModel(QObject *parent = 0);
+    explicit TeacherModel(QObject *parent = 0);
 
 public slots:
     void showDismissed(bool show);
@@ -18,4 +18,4 @@ public slots:
     
 };
 
-#endif // TEACHERSMODEL_H
+#endif // TEACHERMODEL_H

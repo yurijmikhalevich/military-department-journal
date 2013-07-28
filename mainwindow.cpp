@@ -9,6 +9,7 @@
 #include "studentswidget.h"
 #include "troopswidget.h"
 #include "teacherswidget.h"
+#include "universitygroupwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -58,4 +59,8 @@ void MainWindow::on_action_Open_triggered()
     TeachersWidget *widget = new TeachersWidget(ui->tabWidget);
     connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
     ui->tabWidget->addTab(widget, tr("Teachers"));
+
+    UniversityGroupWidget *wwidget = new UniversityGroupWidget(ui->tabWidget);
+//    connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
+    ui->tabWidget->addTab(wwidget, tr("University Groups"));
 }

@@ -1,6 +1,6 @@
 #include "teacherswidget.h"
 #include "ui_teacherswidget.h"
-#include "teachersmodel.h"
+#include "teachermodel.h"
 #include "qt4table-steroids/checkboxdelegate.h"
 
 TeachersWidget::TeachersWidget(QWidget *parent) :
@@ -8,7 +8,7 @@ TeachersWidget::TeachersWidget(QWidget *parent) :
     ui(new Ui::TeachersWidget)
 {
     ui->setupUi(this);
-    TeachersModel *model = new TeachersModel(ui->tableView);
+    TeacherModel *model = new TeacherModel(ui->tableView);
     ui->tableView->setModel(model);
     ui->tableView->hideColumn(0);
     ui->tableView->setColumnWidth(1, 400);

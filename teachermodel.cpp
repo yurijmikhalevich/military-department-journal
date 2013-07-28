@@ -1,9 +1,9 @@
-#include "teachersmodel.h"
+#include "teachermodel.h"
 
 #include <QStringList>
 #include <QDebug>
 
-TeachersModel::TeachersModel(QObject *parent) :
+TeacherModel::TeacherModel(QObject *parent) :
     SteroidsModel<QSqlTableModel>(parent)
 {
     setTable("teacher");
@@ -12,7 +12,7 @@ TeachersModel::TeachersModel(QObject *parent) :
     showDismissed(false);
 }
 
-void TeachersModel::showDismissed(bool show)
+void TeacherModel::showDismissed(bool show)
 {
     if (show) {
         filters.remove("dismissed");
@@ -22,7 +22,7 @@ void TeachersModel::showDismissed(bool show)
     compileFilters();
 }
 
-void TeachersModel::queryChanged(QString query)
+void TeacherModel::queryChanged(QString query)
 {
     if (query.isEmpty()) {
         filters.remove("query");
