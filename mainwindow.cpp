@@ -4,11 +4,10 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QDebug>
+#include <QTabWidget>
 
 #include "database.h"
-#include "studentswidget.h"
-#include "troopswidget.h"
-#include "teacherswidget.h"
+#include "basewidget.h"
 #include "universitygroupwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,16 +15,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    studentsWidget = new StudentsWidget(ui->tabWidget);
-    connect(ui->globalSearch, SIGNAL(textChanged(QString)), studentsWidget, SLOT(globalSearchQueryChanged(QString)));
-    ui->tabWidget->addTab(studentsWidget, tr("Students"));
-    troopsWidget = new TroopsWidget(ui->tabWidget);
-    ui->tabWidget->addTab(troopsWidget, tr("Troops"));
+    tabWidget = new QTabWidget(ui->centralWidget);
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
+    tabWidget->hide();
+    ui->centralWidget->layout()->addWidget(tabWidget);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::displayError(QString message)
+{
+    ui->statusBar->showMessage(message, 2000);
+}
+
+void MainWindow::onCurrentTabChanged(int newTabIndex)
+{
+    if (newTabIndex == -1) {
+        return;
+    }
+    BaseWidget *widget = static_cast<BaseWidget *>(tabWidget->widget(newTabIndex));
+    ui->globalSearch->disconnect();
+    connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
+    disconnect(0, 0, this, SLOT(displayError(QString)));
+    connect(widget, SIGNAL(error(QString)), this, SLOT(displayError(QString)));
 }
 
 void MainWindow::on_action_New_triggered()
@@ -39,10 +54,11 @@ void MainWindow::on_action_New_triggered()
     if (file->exists()) {
         file->remove();
     }
-    qDebug() << Database::init(fileName, true);
-    ui->centralWidget->setEnabled(true);
-    studentsWidget->enable();
-    troopsWidget->enable();
+    if (!Database::init(fileName, true)) {
+        displayError(tr("Cannot init database"));
+    } else {
+        initControls();
+    }
 }
 
 void MainWindow::on_action_Open_triggered()
@@ -52,15 +68,17 @@ void MainWindow::on_action_Open_triggered()
     if (fileName.isEmpty()) {
         return;
     }
-    qDebug() << Database::open(fileName);
-    ui->centralWidget->setEnabled(true);
-    studentsWidget->enable();
-    troopsWidget->enable();
-    TeachersWidget *widget = new TeachersWidget(ui->tabWidget);
-    connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
-    ui->tabWidget->addTab(widget, tr("Teachers"));
+    if (!Database::open(fileName)) {
+        displayError(tr("Cannot open database"));
+    } else {
+        initControls();
+    }
+}
 
-    UniversityGroupWidget *wwidget = new UniversityGroupWidget(ui->tabWidget);
-//    connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
-    ui->tabWidget->addTab(wwidget, tr("University Groups"));
+void MainWindow::initControls()
+{
+    ui->centralWidget->setEnabled(true);
+    ui->emblem->hide();
+    tabWidget->show();
+    tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Group"));
 }

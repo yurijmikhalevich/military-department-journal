@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "studentswidget.h"
-#include "troopswidget.h"
+#include <QTabWidget>
 
 namespace Ui {
 class MainWindow;
@@ -19,13 +17,15 @@ public:
     ~MainWindow();
     
 private slots:
+    void displayError(QString message);
+    void onCurrentTabChanged(int newTabIndex);
     void on_action_New_triggered();
     void on_action_Open_triggered();
 
 private:
     Ui::MainWindow *ui;
-    StudentsWidget *studentsWidget;
-    TroopsWidget *troopsWidget;
+    QTabWidget *tabWidget;
+    void initControls();
 };
 
 #endif // MAINWINDOW_H

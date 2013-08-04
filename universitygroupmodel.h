@@ -12,17 +12,19 @@ public:
     explicit UniversityGroupModel(QObject *parent = 0);
     QVariant data(const QModelIndex &item, int role) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
-    int columnCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &) const;
+public slots:
+    void queryChanged(QString query);
     
 };
 
 #include <QSortFilterProxyModel>
 
-class TestSort : public QSortFilterProxyModel
+class UniversityGroupSortModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit TestSort(QObject *parent = 0) :
+    explicit UniversityGroupSortModel(QObject *parent = 0) :
         QSortFilterProxyModel(parent) {}
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const
     {

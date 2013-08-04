@@ -34,7 +34,17 @@ Qt::ItemFlags UniversityGroupModel::flags(const QModelIndex &index) const
     return SteroidsModel<QSqlTableModel>::flags(index);
 }
 
-int UniversityGroupModel::columnCount(const QModelIndex &parent) const
+int UniversityGroupModel::columnCount(const QModelIndex &) const
 {
     return 4;
+}
+
+void UniversityGroupModel::queryChanged(QString query)
+{
+    if (query.isEmpty()) {
+        filters.remove("query");
+    } else {
+        filters.insert("query", QString("name = '%1'").arg(query));
+    }
+    compileFilters();
 }

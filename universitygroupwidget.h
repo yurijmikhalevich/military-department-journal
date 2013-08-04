@@ -1,7 +1,7 @@
 #ifndef UNIVERSITYGROUPWIDGET_H
 #define UNIVERSITYGROUPWIDGET_H
 
-#include <QWidget>
+#include "basewidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -11,7 +11,7 @@
 #include "universitygroupmodel.h"
 #include "qt4table-steroids/steroidsview.h"
 
-class UniversityGroupWidget : public QWidget
+class UniversityGroupWidget : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -24,16 +24,23 @@ private:
     QSpinBox *yearOfGraduation;
     QPushButton *addNewButton;
     SteroidsView *view;
+    UniversityGroupModel *model;
+    UniversityGroupSortModel *sortModel;
+
+private slots:
+    void invalidInputReceived(QString &input);
+    void newGroupNameTextChanged(QString text);
+    void createNewGroup();
 };
 
 #include "qt4table-steroids/steroidsvalidator.h"
 #include <QSqlQuery>
 
-class TestValidator : public SteroidsValidator
+class UniversityGroupNameValidator : public SteroidsValidator
 {
     Q_OBJECT
 public:
-    explicit TestValidator(QObject *parent = 0) :
+    explicit UniversityGroupNameValidator(QObject *parent = 0) :
         SteroidsValidator(parent) {}
     State validate(QString &input, int &) const
     {
@@ -44,10 +51,13 @@ public:
         query.prepare("SELECT id FROM university_group WHERE name = ? LIMIT 1");
         query.addBindValue(input);
         if (!query.exec() || query.next()) {
+            emit invalidInput(input);
             return Invalid;
         }
         return Acceptable;
     }
+signals:
+    void invalidInput(QString &input) const;
 };
 
 #endif // UNIVERSITYGROUPWIDGET_H

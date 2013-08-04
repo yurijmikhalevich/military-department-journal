@@ -1,11 +1,9 @@
-#include "teacherswidget.h"
-#include "ui_teacherswidget.h"
+#include "teacherwidget.h"
 #include "teachermodel.h"
 #include "qt4table-steroids/checkboxdelegate.h"
 
-TeachersWidget::TeachersWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TeachersWidget)
+TeacherWidget::TeacherWidget(QWidget *parent) :
+    QWidget(parent)
 {
     ui->setupUi(this);
     TeacherModel *model = new TeacherModel(ui->tableView);
@@ -17,18 +15,18 @@ TeachersWidget::TeachersWidget(QWidget *parent) :
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
 }
 
-TeachersWidget::~TeachersWidget()
+TeacherWidget::~TeacherWidget()
 {
     delete ui;
 }
 
 
-void TeachersWidget::addRow()
+void TeacherWidget::addRow()
 {
     ui->tableView->model()->insertRow(ui->tableView->model()->rowCount());
 }
 
-void TeachersWidget::on_addTeacher_clicked()
+void TeacherWidget::on_addTeacher_clicked()
 {
     QAbstractItemModel *model = ui->tableView->model();
     model->insertRow(model->rowCount());

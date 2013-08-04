@@ -17,23 +17,25 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     database.cpp \
-    teacherswidget.cpp \
     troopswidget.cpp \
     sqlrelationaltroopmodel.cpp \
     studentswidget.cpp \
     universitygroupwidget.cpp \
     universitygroupmodel.cpp \
-    teachermodel.cpp
+    teachermodel.cpp \
+    basewidget.cpp \
+    teacherwidget.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
-    teacherswidget.h \
     troopswidget.h \
     sqlrelationaltroopmodel.h \
     studentswidget.h \
     universitygroupwidget.h \
     universitygroupmodel.h \
-    teachermodel.h
+    teachermodel.h \
+    basewidget.h \
+    teacherwidget.h
 
 FORMS    += mainwindow.ui \
     teacherswidget.ui \
@@ -47,3 +49,6 @@ OTHER_FILES = \
     LICENSE.md
 
 include(qt4table-steroids/qt4table-steroids.pri)
+
+RESOURCES += \
+    resources.qrc
