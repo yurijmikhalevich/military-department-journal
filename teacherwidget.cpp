@@ -1,36 +1,49 @@
 #include "teacherwidget.h"
-#include "teachermodel.h"
+
 #include "qt4table-steroids/checkboxdelegate.h"
 
 TeacherWidget::TeacherWidget(QWidget *parent) :
     BaseWidget(parent)
 {
-//    ui->setupUi(this);
-//    TeacherModel *model = new TeacherModel(ui->tableView);
-//    ui->tableView->setModel(model);
-//    ui->tableView->hideColumn(0);
-//    ui->tableView->setColumnWidth(1, 400);
-//    ui->tableView->setItemDelegateForColumn(2, new CheckBoxDelegate(ui->tableView));
-//    connect(ui->showDismissed, SIGNAL(toggled(bool)), model, SLOT(showDismissed(bool)));
-//    connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
+    mainLayout = new QVBoxLayout(this);
+    controlsLayout = new QHBoxLayout();
+    view = new SteroidsView(this);
+    model = new TeacherModel(view);
+    connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
+    view->setModel(model);
+    view->setItemDelegateForColumn(2, new CheckBoxDelegate(view));
+    showDismissedCheckBox = new QCheckBox(tr("Show dismissed"), this);
+    connect(showDismissedCheckBox, SIGNAL(toggled(bool)), model, SLOT(showDismissed(bool)));
+    teacherName = new QLineEdit(this);
+    teacherName->setPlaceholderText(tr("Name"));
+    addTeacherButton = new QPushButton(tr("Add teacher"), this);
+    addTeacherButton->setEnabled(false);
+    connect(teacherName, SIGNAL(returnPressed()), this, SLOT(addTeacher()));
+    connect(addTeacherButton, SIGNAL(clicked()), this, SLOT(addTeacher()));
+    connect(teacherName, SIGNAL(textChanged(QString)), this, SLOT(teacherNameChanged(QString)));
+    controlsLayout->addWidget(teacherName);
+    controlsLayout->addWidget(addTeacherButton);
+    mainLayout->addWidget(showDismissedCheckBox);
+    mainLayout->addWidget(view);
+    mainLayout->addLayout(controlsLayout);
 }
 
-TeacherWidget::~TeacherWidget()
+void TeacherWidget::teacherNameChanged(QString name)
 {
-//    delete ui;
+    if (name.isEmpty()) {
+        addTeacherButton->setDisabled(true);
+    } else {
+        addTeacherButton->setEnabled(true);
+    }
 }
 
-
-void TeacherWidget::addRow()
+void TeacherWidget::addTeacher()
 {
-//    ui->tableView->model()->insertRow(ui->tableView->model()->rowCount());
-}
-
-void TeacherWidget::on_addTeacher_clicked()
-{
-//    QAbstractItemModel *model = ui->tableView->model();
-//    model->insertRow(model->rowCount());
-//    model->setData(model->index(model->rowCount() - 1, 1), ui->newTeacherName->text());
-//    ui->newTeacherName->clear();
-//    model->submit();
+    if (teacherName->text().isEmpty()) {
+        return;
+    }
+    model->insertRow(model->rowCount());
+    model->setData(model->index(model->rowCount() - 1, 1), teacherName->text());
+    teacherName->clear();
+    model->submit();
 }

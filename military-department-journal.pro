@@ -42,7 +42,6 @@ HEADERS  += mainwindow.h \
     militaryprofessionwidget.h
 
 FORMS    += mainwindow.ui \
-    teacherswidget.ui \
     troopswidget.ui \
     studentswidget.ui
 

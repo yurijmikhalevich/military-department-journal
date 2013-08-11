@@ -14,7 +14,7 @@ MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent) :
     model = new MilitaryProfessionModel(this);
     view->setModel(model);
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
-    controlsLayout = new QHBoxLayout(this);
+    controlsLayout = new QHBoxLayout();
     SQLUniqueSteroidsValidator *codeValidator = new SQLUniqueSteroidsValidator(model->tableName(), "code", this);
     SQLUniqueSteroidsValidator *nameValidator = new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
     connect(codeValidator, SIGNAL(invalidInput(QString&)), this, SLOT(invalidCode(QString&)));
