@@ -17,25 +17,29 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     database.cpp \
-    troopswidget.cpp \
-    sqlrelationaltroopmodel.cpp \
     studentswidget.cpp \
     universitygroupwidget.cpp \
     universitygroupmodel.cpp \
     teachermodel.cpp \
     basewidget.cpp \
-    teacherwidget.cpp
+    teacherwidget.cpp \
+    troopwidget.cpp \
+    troopmodel.cpp \
+    militaryprofessionmodel.cpp \
+    militaryprofessionwidget.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
-    troopswidget.h \
-    sqlrelationaltroopmodel.h \
     studentswidget.h \
     universitygroupwidget.h \
     universitygroupmodel.h \
     teachermodel.h \
     basewidget.h \
-    teacherwidget.h
+    teacherwidget.h \
+    troopwidget.h \
+    troopmodel.h \
+    militaryprofessionmodel.h \
+    militaryprofessionwidget.h
 
 FORMS    += mainwindow.ui \
     teacherswidget.ui \

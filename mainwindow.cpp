@@ -9,6 +9,7 @@
 #include "database.h"
 #include "basewidget.h"
 #include "universitygroupwidget.h"
+#include "militaryprofessionwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -81,4 +82,5 @@ void MainWindow::initControls()
     ui->emblem->hide();
     tabWidget->show();
     tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Group"));
+    tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Profession"));
 }

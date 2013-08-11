@@ -1,10 +1,10 @@
-#include "sqlrelationaltroopmodel.h"
+#include "troopmodel.h"
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QDebug>
 #include <QTimer>
 
-SqlRelationalTroopModel::SqlRelationalTroopModel(QObject *parent) :
+TroopModel::TroopModel(QObject *parent) :
     QSqlRelationalTableModel(parent)
 {
     connect(this, SIGNAL(modelReset()), this, SLOT(addCalculatedColumns()));
@@ -19,7 +19,7 @@ SqlRelationalTroopModel::SqlRelationalTroopModel(QObject *parent) :
     this->select();
 }
 
-QVariant SqlRelationalTroopModel::data(const QModelIndex &item, int role) const
+QVariant TroopModel::data(const QModelIndex &item, int role) const
 {
     if (item.column() == 6 && role == Qt::DisplayRole) {
         QSqlQuery query;
@@ -33,7 +33,7 @@ QVariant SqlRelationalTroopModel::data(const QModelIndex &item, int role) const
     return QSqlRelationalTableModel::data(item, role);
 }
 
-void SqlRelationalTroopModel::addCalculatedColumns()
+void TroopModel::addCalculatedColumns()
 {
     this->insertColumn(6);
     this->setHeaderData(6, Qt::Horizontal, tr("Number of students"));

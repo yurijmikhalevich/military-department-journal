@@ -2,8 +2,10 @@
 
 #include <QDate>
 #include <QSqlError>
+#include <QSqlQuery>
 
 #include "qt4table-steroids/lineeditdelegate.h"
+#include "qt4table-steroids/sqluniquesteroidsvalidator.h"
 #include "qt4table-steroids/spinboxdelegate.h"
 
 UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
@@ -11,8 +13,9 @@ UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
 {
     mainLayout = new QVBoxLayout(this);
     view = new SteroidsView(this);
+    model = new UniversityGroupModel(this);
     mainLayout->addWidget(view);
-    UniversityGroupNameValidator *groupNameValidator = new UniversityGroupNameValidator(this);
+    SQLUniqueSteroidsValidator *groupNameValidator = new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
     connect(groupNameValidator, SIGNAL(invalidInput(QString&)), this, SLOT(invalidInputReceived(QString&)));
     LineEditDelegate *groupNameDelegate = new LineEditDelegate(groupNameValidator, this);
     SpinBoxDelegate *yearDelegate = new SpinBoxDelegate(2000, 9999, QDate::currentDate().year() + 2, this);
@@ -28,7 +31,6 @@ UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
     controlsLayout->addWidget(yearOfGraduation);
     controlsLayout->addWidget(addNewButton);
     mainLayout->addLayout(controlsLayout);
-    model = new UniversityGroupModel(this);
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
     sortModel = new UniversityGroupSortModel(this);
     sortModel->setSourceModel(model);
@@ -54,6 +56,9 @@ void UniversityGroupWidget::newGroupNameTextChanged(QString text)
 
 void UniversityGroupWidget::createNewGroup()
 {
+    if (newGroupName->text().isEmpty()) {
+        return;
+    }
     QSqlQuery query;
     query.prepare("INSERT INTO university_group (name, graduated_from_university_in) VALUES (?, ?)");
     query.addBindValue(newGroupName->text());
