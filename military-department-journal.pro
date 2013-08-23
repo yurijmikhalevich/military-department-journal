@@ -17,7 +17,6 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     database.cpp \
-    studentswidget.cpp \
     universitygroupwidget.cpp \
     universitygroupmodel.cpp \
     teachermodel.cpp \
@@ -26,11 +25,12 @@ SOURCES += main.cpp \
     troopwidget.cpp \
     troopmodel.cpp \
     militaryprofessionmodel.cpp \
-    militaryprofessionwidget.cpp
+    militaryprofessionwidget.cpp \
+    studentwidget.cpp \
+    studentmodel.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
-    studentswidget.h \
     universitygroupwidget.h \
     universitygroupmodel.h \
     teachermodel.h \
@@ -39,10 +39,11 @@ HEADERS  += mainwindow.h \
     troopwidget.h \
     troopmodel.h \
     militaryprofessionmodel.h \
-    militaryprofessionwidget.h
+    militaryprofessionwidget.h \
+    studentwidget.h \
+    studentmodel.h
 
 FORMS    += mainwindow.ui \
-    troopswidget.ui \
     studentswidget.ui
 
 TRANSLATIONS += linguas_ru.ts

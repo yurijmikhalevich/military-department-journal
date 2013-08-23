@@ -5,18 +5,17 @@
 #include <QTimer>
 
 TroopModel::TroopModel(QObject *parent) :
-    QSqlRelationalTableModel(parent)
+    SteroidsModel<QSqlRelationalTableModel>(parent)
 {
-    connect(this, SIGNAL(modelReset()), this, SLOT(addCalculatedColumns()));
-    this->setTable("troop");
-    this->setJoinMode(QSqlRelationalTableModel::LeftJoin);
-    this->setRelation(5, QSqlRelation("teacher", "id", "name"));
-    this->setHeaderData(1, Qt::Horizontal, tr("Troop"));
-//    this->setHeaderData(2, Qt::Horizontal, tr("Year of training"));
-    this->setHeaderData(3, Qt::Horizontal, tr("YGM", "Year of graduation from Faculty of Military Training"));
-    this->setHeaderData(4, Qt::Horizontal, tr("Graduated"));
-    this->setHeaderData(5, Qt::Horizontal, tr("Curator"));
-    this->select();
+    setTable("troop");
+    setJoinMode(QSqlRelationalTableModel::LeftJoin);
+    setRelation(5, QSqlRelation("teacher", "id", "name"));
+    setHeaderData(1, Qt::Horizontal, tr("Troop"));
+    setHeaderData(2, Qt::Horizontal, tr("Year of training"));
+    setHeaderData(3, Qt::Horizontal, tr("YGM", "Year of graduation from Faculty of Military Training"));
+    setHeaderData(4, Qt::Horizontal, tr("Graduated"));
+    setHeaderData(5, Qt::Horizontal, tr("Curator"));
+    select();
 }
 
 QVariant TroopModel::data(const QModelIndex &item, int role) const
@@ -30,11 +29,23 @@ QVariant TroopModel::data(const QModelIndex &item, int role) const
         }
         return QVariant();
     }
-    return QSqlRelationalTableModel::data(item, role);
+    return SteroidsModel<QSqlRelationalTableModel>::data(item, role);
 }
 
-void TroopModel::addCalculatedColumns()
+Qt::ItemFlags TroopModel::flags(const QModelIndex &index) const
 {
-    this->insertColumn(6);
-    this->setHeaderData(6, Qt::Horizontal, tr("Number of students"));
+    if (index.column() == 6) {
+        return Qt::ItemIsEnabled;
+    }
+    return SteroidsModel<QSqlRelationalTableModel>::flags(index);
+}
+
+int TroopModel::columnCount(const QModelIndex &) const
+{
+    return 7;
+}
+
+void TroopModel::queryChanged(QString query)
+{
+
 }

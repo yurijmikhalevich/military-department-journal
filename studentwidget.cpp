@@ -1,24 +1,20 @@
-#include "studentswidget.h"
-#include "ui_studentswidget.h"
+#include "studentwidget.h"
 
 #include <QSqlRelationalTableModel>
 #include <QSqlRelationalDelegate>
 #include <QSqlRecord>
 #include <QDebug>
 
-StudentsWidget::StudentsWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::StudentsWidget)
+StudentWidget::StudentWidget(QWidget *parent) :
+    BaseWidget(parent)
 {
-    ui->setupUi(this);
 }
 
-StudentsWidget::~StudentsWidget()
+StudentWidget::~StudentWidget()
 {
-    delete ui;
 }
 
-void StudentsWidget::enable()
+void StudentWidget::enable()
 {
     model = new QSqlRelationalTableModel(this, QSqlDatabase::database());
     model->setTable("student");
@@ -40,26 +36,20 @@ void StudentsWidget::enable()
 //    model->setHeaderData(12, Qt::Horizontal, tr("Graduated"));
     model->setHeaderData(12, Qt::Horizontal, tr("Troop"));
     model->select();
-    ui->tableView->setModel(model);
-    ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
-    ui->tableView->hideColumn(0);
-    ui->tableView->hideColumn(4);
-    ui->tableView->hideColumn(5);
-    ui->tableView->hideColumn(6);
-    ui->tableView->hideColumn(10);
-    ui->tableView->hideColumn(11);
-    ui->tableView->setEditTriggers(QTableView::NoEditTriggers);
+//    ui->tableView->setModel(model);
+//    ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+//    ui->tableView->hideColumn(0);
+//    ui->tableView->hideColumn(4);
+//    ui->tableView->hideColumn(5);
+//    ui->tableView->hideColumn(6);
+//    ui->tableView->hideColumn(10);
+//    ui->tableView->hideColumn(11);
+//    ui->tableView->setEditTriggers(QTableView::NoEditTriggers);
 }
 
-void StudentsWidget::globalSearchQueryChanged(QString query)
+void StudentWidget::globalSearchQueryChanged(QString query)
 {
     qDebug() << QString("firstname LIKE '%%1%' OR university_group_name_2 LIKE '%%1%'").arg(query);
     model->setFilter(QString("firstname LIKE '%%1%' OR university_group_name_2 LIKE '%%1%'").arg(query));
     model->select();
-}
-
-void StudentsWidget::on_tableView_activated(const QModelIndex &index)
-{
-    QSqlRecord record = model->record(index.row());
-    qDebug() << record;
 }

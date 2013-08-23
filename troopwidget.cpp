@@ -1,23 +1,22 @@
 #include "troopwidget.h"
 
-#include "troopmodel.h"
-
 #include <QSqlRelationalDelegate>
+#include "qt4table-steroids/steroidsrelationaldelegate.h"
 
 TroopWidget::TroopWidget(QWidget *parent) :
-    QWidget(parent)
+    BaseWidget(parent)
 {
-}
-
-TroopWidget::~TroopWidget()
-{
-}
-
-void TroopWidget::enable()
-{
-//    delete ui->tableView->model();
-//    ui->tableView->setModel(new SqlRelationalTroopModel(ui->tableView));
-//    ui->tableView->hideColumn(0);
-//    ui->tableView->hideColumn(2);
-//    ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+    mainLayout = new QVBoxLayout(this);
+    view = new SteroidsView(this);
+    mainLayout->addWidget(view);
+    model = new TroopModel(view);
+    view->setModel(model);
+    view->setItemDelegateForColumn(5, new SteroidsRelationalDelegate(false, view));
+//    view->setItemDelegate(new QSqlRelationalDelegate(view));
+//    QSqlRelationalDelegate *delegate = new QSqlRelationalDelegate(view);
+//    QWidget *ce = delegate->createEditor(view->indexWidget(model->index(0, 5)), QStyleOptionViewItem(), QModelIndex());
+//    QWidget *ce = view->itemDelegateForColumn(5)->createEditor(view->indexWidget(model->index(0, 5)), QStyleOptionViewItem(), QModelIndex());
+//    QComboBox *curatorEditor = static_cast<QComboBox *>(view->itemDelegateForColumn(5)->createEditor(
+//                                                            view, QStyleOptionViewItem(), QModelIndex()));
+//    mainLayout->addWidget(ce);
 }

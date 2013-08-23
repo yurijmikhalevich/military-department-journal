@@ -1,16 +1,33 @@
 #ifndef TROOPWIDGET_H
 #define TROOPWIDGET_H
 
-#include <QWidget>
+#include "basewidget.h"
 
-class TroopWidget : public QWidget
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QComboBox>
+
+#include "qt4table-steroids/steroidsview.h"
+
+#include "troopmodel.h"
+
+class TroopWidget : public BaseWidget
 {
     Q_OBJECT
     
 public:
     explicit TroopWidget(QWidget *parent = 0);
-    ~TroopWidget();
-    void enable();
+
+private:
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *controlsLayout;
+    QLineEdit *nameEdit;
+    QSpinBox *ygmEdit;
+    QComboBox *curatorEdit;
+    SteroidsView *view;
+    TroopModel *model;
 };
 
 #endif // TROOPWIDGET_H

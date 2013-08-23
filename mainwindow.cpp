@@ -11,6 +11,8 @@
 #include "universitygroupwidget.h"
 #include "militaryprofessionwidget.h"
 #include "teacherwidget.h"
+#include "troopwidget.h"
+#include "studentwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,8 +43,6 @@ void MainWindow::onCurrentTabChanged(int newTabIndex)
     BaseWidget *widget = static_cast<BaseWidget *>(tabWidget->widget(newTabIndex));
     ui->globalSearch->disconnect();
     connect(ui->globalSearch, SIGNAL(textChanged(QString)), widget, SIGNAL(queryChanged(QString)));
-    disconnect(0, 0, this, SLOT(displayError(QString)));
-    connect(widget, SIGNAL(error(QString)), this, SLOT(displayError(QString)));
 }
 
 void MainWindow::on_action_New_triggered()
@@ -81,8 +81,14 @@ void MainWindow::initControls()
 {
     ui->centralWidget->setEnabled(true);
     ui->emblem->hide();
+    tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
+    tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));
+    tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
+    tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Professions"));
+    tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
+    for (int i = 0; i < tabWidget->count(); ++i) {
+        connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
+                this, SLOT(displayError(QString)));
+    }
     tabWidget->show();
-    tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teacher"));
-    tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Group"));
-    tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Profession"));
 }
