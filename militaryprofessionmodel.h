@@ -10,9 +10,6 @@ class MilitaryProfessionModel : public SteroidsModel<QSqlTableModel>
     Q_OBJECT
 public:
     explicit MilitaryProfessionModel(QObject *parent = 0);
-//    QVariant data(const QModelIndex &item, int role) const;
-//    Qt::ItemFlags flags(const QModelIndex &index) const;
-//    int columnCount(const QModelIndex &) const;
 
 public slots:
     void queryChanged(QString query);

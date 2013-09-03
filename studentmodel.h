@@ -3,6 +3,8 @@
 
 #include "qt4table-steroids/steroidsmodel.h"
 
+#include <QSqlRelationalTableModel>
+
 class StudentModel : public SteroidsModel<QSqlRelationalTableModel>
 {
     Q_OBJECT

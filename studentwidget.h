@@ -16,10 +16,6 @@ public:
     explicit StudentWidget(QWidget *parent = 0);
     ~StudentWidget();
 
-public slots:
-    void enable();
-    void globalSearchQueryChanged(QString query);
-
 private:
     StudentModel *model;
 };

@@ -11,7 +11,9 @@ TroopWidget::TroopWidget(QWidget *parent) :
     mainLayout->addWidget(view);
     model = new TroopModel(view);
     view->setModel(model);
-    view->setItemDelegateForColumn(5, new SteroidsRelationalDelegate(false, view));
+    SteroidsRelationalDelegate *delegate = new SteroidsRelationalDelegate(false, view);
+    view->setItemDelegateForColumn(5, delegate);
+    // TODO: troops adding
 //    view->setItemDelegate(new QSqlRelationalDelegate(view));
 //    QSqlRelationalDelegate *delegate = new QSqlRelationalDelegate(view);
 //    QWidget *ce = delegate->createEditor(view->indexWidget(model->index(0, 5)), QStyleOptionViewItem(), QModelIndex());
