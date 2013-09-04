@@ -81,7 +81,7 @@ void MainWindow::initControls()
 {
     ui->centralWidget->setEnabled(true);
     ui->emblem->hide();
-    tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
+//    tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
     tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
     tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));
     tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
