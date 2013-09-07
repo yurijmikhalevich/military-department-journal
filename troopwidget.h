@@ -28,6 +28,11 @@ private:
     QComboBox *curatorEdit;
     SteroidsView *view;
     TroopModel *model;
+
+    QComboBox *biribiri;
+
+private slots:
+    void cin(int n);
 };
 
 #endif // TROOPWIDGET_H
