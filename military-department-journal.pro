@@ -43,8 +43,7 @@ HEADERS  += mainwindow.h \
     studentwidget.h \
     studentmodel.h
 
-FORMS    += mainwindow.ui \
-    studentswidget.ui
+FORMS    += mainwindow.ui
 
 TRANSLATIONS += linguas_ru.ts
 

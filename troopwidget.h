@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QPushButton>
 
 #include "qt4table-steroids/steroidsview.h"
 
@@ -26,13 +27,12 @@ private:
     QLineEdit *nameEdit;
     QSpinBox *ygmEdit;
     QComboBox *curatorEdit;
+    QPushButton *addTroopButton;
     SteroidsView *view;
     TroopModel *model;
 
-    QComboBox *biribiri;
-
 private slots:
-    void cin(int n);
+    void addTroop();
 };
 
 #endif // TROOPWIDGET_H

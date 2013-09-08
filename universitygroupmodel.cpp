@@ -29,7 +29,7 @@ QVariant UniversityGroupModel::data(const QModelIndex &item, int role) const
 Qt::ItemFlags UniversityGroupModel::flags(const QModelIndex &index) const
 {
     if (index.column() == 3) {
-        return Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
     return SteroidsModel<QSqlTableModel>::flags(index);
 }

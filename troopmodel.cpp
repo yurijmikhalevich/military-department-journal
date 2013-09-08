@@ -35,7 +35,7 @@ QVariant TroopModel::data(const QModelIndex &item, int role) const
 Qt::ItemFlags TroopModel::flags(const QModelIndex &index) const
 {
     if (index.column() == 6) {
-        return Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
     return SteroidsModel<QSqlRelationalTableModel>::flags(index);
 }
