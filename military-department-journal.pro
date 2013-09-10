@@ -52,6 +52,7 @@ OTHER_FILES = \
     LICENSE.md
 
 include(qt4table-steroids/qt4table-steroids.pri)
+include(quazip/quazip.pri)
 
 RESOURCES += \
     resources.qrc
