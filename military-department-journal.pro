@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql network
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -13,6 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = military-department-journal
 TEMPLATE = app
 
+LIBS += -lz
 
 SOURCES += main.cpp \
     mainwindow.cpp \

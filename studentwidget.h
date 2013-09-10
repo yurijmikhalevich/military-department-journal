@@ -9,6 +9,7 @@
 #include <QDateEdit>
 #include <QCalendarWidget>
 #include <QPushButton>
+#include <QNetworkAccessManager>
 
 #include "qt4table-steroids/steroidsview.h"
 #include "qt4table-steroids/lineeditdelegate.h"
@@ -27,6 +28,8 @@ public:
 
 private:
     QLayout *createControlsLayout();
+
+    static QNetworkAccessManager *networkManager;
 
     SteroidsView *view;
     StudentModel *model;
@@ -50,6 +53,10 @@ private:
     QComboBox *troopEdit;
 
     QPushButton *addStudentButton;
+
+private slots:
+    void addStudent();
+    void morphName();
 };
 
 #endif // STUDENTWIDGET_H
