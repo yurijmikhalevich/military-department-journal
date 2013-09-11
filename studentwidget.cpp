@@ -93,6 +93,7 @@ QLayout *StudentWidget::createControlsLayout()
     addStudentButton = new QPushButton(tr("Add student"));
     connect(addStudentButton, SIGNAL(clicked()), this, SLOT(addStudent()));
     controlsLayout->addWidget(addStudentButton);
+    connect(middlenameEdit, SIGNAL(editingFinished()), this, SLOT(morphName()));
     return controlsLayout;
 }
 
@@ -133,6 +134,14 @@ void StudentWidget::morphName()
     connect(reply, SIGNAL(finished()), loop, SLOT(quit()));
     loop->exec();
     QString response = QString(reply->readAll());
+    QStringList accusative = response.split("<В>").at(1).split("</В>").at(0).split(" ");
+    QStringList datum = response.split("<Д>").at(1).split("</Д>").at(0).split(" ");
+    lastnameDatumEdit->setText(datum.at(0));
+    firstnameDatumEdit->setText(datum.at(1));
+    middlenameDatumEdit->setText(datum.at(2));
+    lastnameAccusativeEdit->setText(accusative.at(0));
+    firstnameAccusativeEdit->setText(accusative.at(1));
+    middlenameAccusativeEdit->setText(accusative.at(2));
 //    if (response.contains("<В>")) {
 //        return response.split("<В>").at(1).split("</В>").at(0);
 //    } else {
