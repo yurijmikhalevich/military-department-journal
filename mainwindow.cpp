@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QTabWidget>
+#include <QSettings>
 
 #include "database.h"
 #include "basewidget.h"
@@ -23,6 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
     tabWidget->hide();
     ui->centralWidget->layout()->addWidget(tabWidget);
+    QSettings settings(QApplication::applicationDirPath() + QDir::separator() + "settings.ini", QSettings::IniFormat);
+    if (settings.contains("base")) {
+        if (!Database::open(settings.value("base").toString())) {
+            displayError(tr("Cannot open database"));
+        } else {
+            initControls();
+        }
+    }
 }
 
 MainWindow::~MainWindow()
