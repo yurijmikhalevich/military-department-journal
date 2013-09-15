@@ -1,5 +1,4 @@
 #include "troopwidget.h"
-
 #include <QSqlRelationalDelegate>
 #include <QDebug>
 #include <QAbstractItemModel>
@@ -10,6 +9,7 @@
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/tablehelper.h"
 #include "qt4table-steroids/spinboxdelegate.h"
+#include "troopmodel.h"
 
 TroopWidget::TroopWidget(QWidget *parent) :
     BaseWidget(parent)

@@ -2,16 +2,11 @@
 #define TEACHERWIDGET_H
 
 #include "basewidget.h"
-
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QPushButton>
-
-#include "qt4table-steroids/steroidsview.h"
-
-#include "teachermodel.h"
 
 class TeacherWidget : public BaseWidget
 {
@@ -26,12 +21,8 @@ private:
     QCheckBox *showDismissedCheckBox;
     QPushButton *addTeacherButton;
     QLineEdit *teacherName;
-    SteroidsView *view;
-    TeacherModel *model;
-
 signals:
     void queryChanged(QString query);
-
 private slots:
     void teacherNameChanged(QString name);
     void addTeacher();

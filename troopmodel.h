@@ -15,7 +15,6 @@ public:
     QVariant data(const QModelIndex &item, int role) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int columnCount(const QModelIndex &) const;
-
 public slots:
     void queryChanged(QString query);
 };

@@ -7,9 +7,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QPushButton>
-
-#include "universitygroupmodel.h"
-#include "qt4table-steroids/steroidsview.h"
+#include <QSortFilterProxyModel>
 
 class UniversityGroupWidget : public BaseWidget
 {
@@ -23,9 +21,7 @@ private:
     QLineEdit *newGroupName;
     QSpinBox *yearOfGraduation;
     QPushButton *addNewButton;
-    SteroidsView *view;
-    UniversityGroupModel *model;
-    UniversityGroupSortModel *sortModel;
+    QSortFilterProxyModel *sortModel;
 
 private slots:
     void invalidInputReceived(QString &input);

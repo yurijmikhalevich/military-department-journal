@@ -1,5 +1,4 @@
 #include "teachermodel.h"
-
 #include <QStringList>
 #include <QDebug>
 

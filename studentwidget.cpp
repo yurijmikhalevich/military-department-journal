@@ -1,5 +1,4 @@
 #include "studentwidget.h"
-
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -13,8 +12,8 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QEventLoop>
-
 #include "qt4table-steroids/tablehelper.h"
+#include "studentmodel.h"
 
 QNetworkAccessManager *StudentWidget::networkManager = new QNetworkAccessManager();
 

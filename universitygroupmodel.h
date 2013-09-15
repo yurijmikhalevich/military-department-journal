@@ -1,9 +1,8 @@
 #ifndef UNIVERSITYGROUPMODEL_H
 #define UNIVERSITYGROUPMODEL_H
 
-#include <QSqlTableModel>
-
 #include "qt4table-steroids/steroidsmodel.h"
+#include <QSqlTableModel>
 
 class UniversityGroupModel : public SteroidsModel<QSqlTableModel>
 {

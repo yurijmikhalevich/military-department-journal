@@ -2,7 +2,6 @@
 #define STUDENTWIDGET_H
 
 #include "basewidget.h"
-
 #include <QLayout>
 #include <QLineEdit>
 #include <QComboBox>
@@ -10,30 +9,19 @@
 #include <QCalendarWidget>
 #include <QPushButton>
 #include <QNetworkAccessManager>
-
-#include "qt4table-steroids/steroidsview.h"
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/spinboxdelegate.h"
 #include "qt4table-steroids/checkboxdelegate.h"
 
-#include "studentmodel.h"
-
 class StudentWidget : public BaseWidget
 {
     Q_OBJECT
-    
 public:
     explicit StudentWidget(QWidget *parent = 0);
     ~StudentWidget();
-
 private:
     QLayout *createControlsLayout();
-
     static QNetworkAccessManager *networkManager;
-
-    SteroidsView *view;
-    StudentModel *model;
-
     QLineEdit *firstnameEdit;
     QLineEdit *middlenameEdit;
     QLineEdit *lastnameEdit;
@@ -51,9 +39,7 @@ private:
 //    QComboBox *expulsionReasonEdit;
 //    QComboBox *expulsedFromEdit;
     QComboBox *troopEdit;
-
     QPushButton *addStudentButton;
-
 private slots:
     void addStudent();
     void morphName();

@@ -2,7 +2,6 @@
 #define STUDENTMODEL_H
 
 #include "qt4table-steroids/steroidsmodel.h"
-
 #include <QSqlRelationalTableModel>
 
 class StudentModel : public SteroidsModel<QSqlRelationalTableModel>
@@ -10,11 +9,6 @@ class StudentModel : public SteroidsModel<QSqlRelationalTableModel>
     Q_OBJECT
 public:
     explicit StudentModel(QObject *parent = 0);
-    
-signals:
-    
-public slots:
-    
 };
 
 #endif // STUDENTMODEL_H

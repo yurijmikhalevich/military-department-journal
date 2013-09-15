@@ -2,15 +2,14 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
-
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
+#include "militaryprofessionmodel.h"
 
 MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent) :
     BaseWidget(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    view = new SteroidsView(this);
     model = new MilitaryProfessionModel(this);
     view->setModel(model);
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));

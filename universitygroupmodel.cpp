@@ -1,5 +1,4 @@
 #include "universitygroupmodel.h"
-
 #include <QSqlQuery>
 #include <QSqlRecord>
 
