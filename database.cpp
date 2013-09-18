@@ -111,10 +111,9 @@ bool Database::init(QString fileName, bool test)
     }
     if (test) {
         QSqlQuery *query = new QSqlQuery(db);
-//        if (!query->exec("INSERT INTO university_department (name) VALUES ('Applied informatics')")) {
-//            return false;
-//        }
-//        QVariant id = query->lastInsertId();
+        if (!query->exec("INSERT INTO control_type (name) VALUES ('exam'), ('credit'), ('validation')")) {
+            return false;
+        }
         QVariant id;
         query->prepare("INSERT INTO university_group (name) VALUES ('AI-0904')");
         if (!query->exec()) {
