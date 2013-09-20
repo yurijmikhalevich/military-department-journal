@@ -28,7 +28,9 @@ SOURCES += main.cpp \
     militaryprofessionmodel.cpp \
     militaryprofessionwidget.cpp \
     studentwidget.cpp \
-    studentmodel.cpp
+    studentmodel.cpp \
+    subjectmodel.cpp \
+    subjectwidget.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     militaryprofessionmodel.h \
     militaryprofessionwidget.h \
     studentwidget.h \
-    studentmodel.h
+    studentmodel.h \
+    subjectmodel.h \
+    subjectwidget.h
 
 FORMS    += mainwindow.ui
 
