@@ -12,7 +12,6 @@ UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
     BaseWidget(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    view = new SteroidsView(this);
     model = new UniversityGroupModel(this);
     mainLayout->addWidget(view);
     SQLUniqueSteroidsValidator *groupNameValidator = new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
@@ -35,7 +34,7 @@ UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
     sortModel = new UniversityGroupSortModel(this);
     sortModel->setSourceModel(model);
     view->setModel(sortModel);
-    view->setItemDelegateForColumn(1, groupNameDelegate);
+//    view->setItemDelegateForColumn(1, groupNameDelegate);
     view->setItemDelegateForColumn(2, yearDelegate);
     model->select();
 }

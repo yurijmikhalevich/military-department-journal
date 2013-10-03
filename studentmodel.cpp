@@ -27,3 +27,14 @@ StudentModel::StudentModel(QObject *parent) :
     setHeaderData(16, Qt::Horizontal, tr("Troop"));
     select();
 }
+
+void StudentModel::queryChanged(QString query)
+{
+    if (query.isEmpty()) {
+        filters.remove("query");
+    } else {
+        filters.insert("query", QString("university_group_id IN "
+                                        "(SELECT id FROM university_group WHERE name LIKE '%%1%')").arg(query));
+    }
+    compileFilters();
+}

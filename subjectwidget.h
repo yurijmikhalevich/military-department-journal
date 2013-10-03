@@ -2,16 +2,19 @@
 #define SUBJECTWIDGET_H
 
 #include "basewidget.h"
+#include <QPushButton>
+#include <QLineEdit>
 
 class SubjectWidget : public BaseWidget
 {
     Q_OBJECT
 public:
     explicit SubjectWidget(QWidget *parent = 0);
-    
-signals:
-    
-public slots:
+private:
+    QPushButton *addSubjectButton;
+    QLineEdit *subjectNameEdit;
+private slots:
+    void addSubject();
     
 };
 

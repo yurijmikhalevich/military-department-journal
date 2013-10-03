@@ -14,6 +14,7 @@
 #include "teacherwidget.h"
 #include "troopwidget.h"
 #include "studentwidget.h"
+#include "subjectwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,14 +25,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
     tabWidget->hide();
     ui->centralWidget->layout()->addWidget(tabWidget);
-    QSettings settings(QApplication::applicationDirPath() + QDir::separator() + "settings.ini", QSettings::IniFormat);
-    if (settings.contains("base")) {
-        if (!Database::open(settings.value("base").toString())) {
-            displayError(tr("Cannot open database"));
-        } else {
-            initControls();
-        }
-    }
+//    QSettings settings(QApplication::applicationDirPath() + QDir::separator() + "settings.ini", QSettings::IniFormat);
+//    if (settings.contains("base")) {
+//        if (!Database::open(settings.value("base").toString())) {
+//            displayError(tr("Cannot open database"));
+//        } else {
+//            initControls();
+//        }
+//    }
 }
 
 MainWindow::~MainWindow()
@@ -95,6 +96,7 @@ void MainWindow::initControls()
     tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));
     tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
     tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Professions"));
+    tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
     for (int i = 0; i < tabWidget->count(); ++i) {
         connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
                 this, SLOT(displayError(QString)));

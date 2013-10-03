@@ -15,7 +15,6 @@ TroopWidget::TroopWidget(QWidget *parent) :
     BaseWidget(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    view = new SteroidsView(this);
     mainLayout->addWidget(view);
     model = new TroopModel(view);
     view->setModel(model);
