@@ -17,7 +17,7 @@ private:
     QComboBox *subjectEdit;
     QComboBox *controlTypeEdit;
     QComboBox *teacherEdit;
-    QComboBox *troopEdit;
+    QComboBox *universityGroupEdit;
     QDateEdit *dateEdit;
 private slots:
     void addEvaluation();

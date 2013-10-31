@@ -23,7 +23,7 @@ StudentWidget::StudentWidget(QWidget *parent) :
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(view);
     model = new StudentModel(view);
-    connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged));
+    connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
     view->setModel(model);
     mainLayout->addLayout(createControlsLayout());
 }

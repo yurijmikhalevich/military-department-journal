@@ -104,7 +104,7 @@ bool Database::init(QString fileName, bool test)
             "  subject_id INTEGER REFERENCES subject (id) NOT NULL,"
             "  control_type_id INTEGER REFERENCES control_type (id) NOT NULL,"
             "  teacher_id INTEGER REFERENCES teacher (id) NOT NULL,"
-            "  troop_id INTEGER REFERENCES troop (id) NOT NULL,"
+            "  university_group_id INTEGER REFERENCES university_group_id (id) NOT NULL,"
             "  date DATE NOT NULL"
             ");"
             "CREATE TABLE mark ("
