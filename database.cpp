@@ -142,10 +142,9 @@ bool Database::init(QString fileName, bool test)
             }
             studentIds.append(query->lastInsertId());
         }
-        query->prepare("INSERT INTO subject (duration, name) VALUES (?, ?)");
+        query->prepare("INSERT INTO subject (name) VALUES (?)");
         QVariantList subjectIds;
         for (QString subjectName : { "Wizard trainging", "Sword training", "Jump training" }) {
-            query->addBindValue(30);
             query->addBindValue(subjectName);
             if (!query->exec()) {
                 return false;

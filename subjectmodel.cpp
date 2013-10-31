@@ -5,7 +5,6 @@ SubjectModel::SubjectModel(QObject *parent) :
 {
     setTable("subject");
     setHeaderData(1, Qt::Horizontal, tr("Subject"));
-    setHeaderData(2, Qt::Horizontal, tr("Duration"));
-//    setHeaderData(3, Qt::Horizontal, tr("Archived"));
+//    setHeaderData(2, Qt::Horizontal, tr("Archived"));
     select();
 }
