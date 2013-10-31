@@ -11,7 +11,7 @@ SubjectWidget::SubjectWidget(QWidget *parent) :
     model = new SubjectModel(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     view->setModel(model);
-    view->hideColumn(3); // TODO: remove and add checkbox "Show archived"
+    view->hideColumn(2); // TODO: remove and add checkbox "Show archived"
     mainLayout->addWidget(view);
     QHBoxLayout *controlsLayout = new QHBoxLayout();
     subjectNameEdit = new QLineEdit(this);

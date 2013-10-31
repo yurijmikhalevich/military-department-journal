@@ -15,6 +15,7 @@
 #include "troopwidget.h"
 #include "studentwidget.h"
 #include "subjectwidget.h"
+#include "evaluationwidget.h"
 
 //#include <QDate>
 //#include "documentgenerator.h"
@@ -103,6 +104,7 @@ void MainWindow::initControls()
 {
     ui->centralWidget->setEnabled(true);
     ui->emblem->hide();
+    tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluation"));
     tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
     tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
     tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));

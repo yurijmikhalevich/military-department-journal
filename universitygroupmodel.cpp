@@ -6,7 +6,10 @@ UniversityGroupModel::UniversityGroupModel(QObject *parent) :
     SteroidsModel<QSqlTableModel>(parent)
 {
     setTable("university_group");
+//    setJoinMode(QSqlRelationalTableModel::LeftJoin);
+//    setRelation(3, QSqlRelation("faculty", "id", "name"));
     setHeaderData(1, Qt::Horizontal, tr("Name"));
+//    setHeaderData(2, Qt::Horizontal, tr("Faculty"));
     setHeaderData(2, Qt::Horizontal, tr("Graduated from in"));
     setHeaderData(3, Qt::Horizontal, tr("Number of students"));
 }

@@ -3,7 +3,8 @@
 
 #include "basewidget.h"
 #include <QPushButton>
-#include <QLineEdit>
+#include <QComboBox>
+#include <QDateEdit>
 
 class EvaluationWidget : public BaseWidget
 {
@@ -11,10 +12,16 @@ class EvaluationWidget : public BaseWidget
 public:
     explicit EvaluationWidget(QWidget *parent = 0);
 private:
-    QPushButton *addSubjectButton;
-    QLineEdit *subjectNameEdit;
+    QPushButton *addEvaluationButton;
+    QPushButton *generateEvaluationListButton;
+    QComboBox *subjectEdit;
+    QComboBox *controlTypeEdit;
+    QComboBox *teacherEdit;
+    QComboBox *troopEdit;
+    QDateEdit *dateEdit;
 private slots:
-    void addSubject();
+    void addEvaluation();
+    void generateEvaluationList();
 
 };
 

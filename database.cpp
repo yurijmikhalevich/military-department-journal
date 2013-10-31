@@ -26,10 +26,15 @@ bool Database::init(QString fileName, bool test)
         return false;
     }
     QString initScript =
+            "CREATE TABLE faculty ("
+            "  id INTEGER PRIMARY KEY,"
+            "  name TEXT NOT NULL UNIQUE"
+            ");"
             "CREATE TABLE university_group ("
             "  id INTEGER PRIMARY KEY,"
             "  name TEXT NOT NULL UNIQUE,"
-            "  graduated_from_university_in INTEGER"
+            "  graduated_from_university_in INTEGER,"
+            "  faculty_id INTEGER REFERENCES faculty (id) NOT NULL"
             ");"
             "CREATE TABLE expulsion_reason ("
             "  id INTEGER PRIMARY KEY,"
@@ -120,7 +125,13 @@ bool Database::init(QString fileName, bool test)
             return false;
         }
         QVariant id;
-        query->prepare("INSERT INTO university_group (name) VALUES ('AI-0904')");
+        query->prepare("INSERT INTO faculty (name) VALUES ('AI')");
+        if (!query->exec()) {
+            return false;
+        }
+        id = query->lastInsertId();
+        query->prepare("INSERT INTO university_group (name, faculty_id) VALUES ('AI-0904', ?)");
+        query->addBindValue(id);
         if (!query->exec()) {
             return false;
         }
