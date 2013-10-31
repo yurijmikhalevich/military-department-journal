@@ -82,7 +82,7 @@ bool Database::init(QString fileName, bool test)
             "CREATE TABLE subject ("
             "  id INTEGER PRIMARY KEY,"
             "  duration INTEGER NOT NULL,"
-            "  archived BOOLEAN DEFAULT 0 NOT NULL"
+            "  archived BOOLEAN DEFAULT 0 NOT NULL,"
             "  name TEXT NOT NULL UNIQUE"
             ");"
             "CREATE TABLE control_type (" // that table is preconfigured, used as ENUM
@@ -137,10 +137,11 @@ bool Database::init(QString fileName, bool test)
             }
             studentIds.append(query->lastInsertId());
         }
-        query->prepare("INSERT INTO subject (name) VALUES (?)");
+        query->prepare("INSERT INTO subject (name, duration) VALUES (?, ?)");
         QVariantList subjectIds;
         for (QString subjectName : { "Wizard trainging", "Sword training", "Jump training" }) {
             query->addBindValue(subjectName);
+            query->addBindValue(140);
             if (!query->exec()) {
                 return false;
             }
@@ -155,32 +156,20 @@ bool Database::init(QString fileName, bool test)
             }
             controlTypeIds.append(query->lastInsertId());
         }
-        query->prepare("INSERT INTO subject2control_type (subject_id, control_type_id) VALUES (?, ?)");
-        for (QVariantList row : QList<QVariantList>({ { subjectIds.at(0), controlTypeIds.at(0) },
-                                                      { subjectIds.at(0), controlTypeIds.at(1) },
-                                                      { subjectIds.at(1), controlTypeIds.at(0) },
-                                                      { subjectIds.at(2), controlTypeIds.at(0) },
-                                                      { subjectIds.at(2), controlTypeIds.at(1) } })) {
-            query->addBindValue(row.at(0));
-            query->addBindValue(row.at(1));
-            if (!query->exec()) {
-                return false;
-            }
-        }
-        query->prepare("INSERT INTO mark (subject_id, control_type_id, student_id, value) VALUES (?, ?, ?, ?)");
-        for (QVariantList row :
-             QList<QVariantList>({ { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(0), "fine" },
-                                   { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(1), "good" },
-                                   { subjectIds.at(1), controlTypeIds.at(0), studentIds.at(0), "bad"  },
-                                   { subjectIds.at(0), controlTypeIds.at(1), studentIds.at(0), "pass" },
-                                   { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(1), "fine" } })) {
-            for (short i = 0; i < 4; ++i) {
-                query->addBindValue(row.at(i));
-            }
-            if (!query->exec()) {
-                return false;
-            }
-        }
+//        query->prepare("INSERT INTO mark (subject_id, control_type_id, student_id, value) VALUES (?, ?, ?, ?)");
+//        for (QVariantList row :
+//             QList<QVariantList>({ { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(0), "fine" },
+//                                   { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(1), "good" },
+//                                   { subjectIds.at(1), controlTypeIds.at(0), studentIds.at(0), "bad"  },
+//                                   { subjectIds.at(0), controlTypeIds.at(1), studentIds.at(0), "pass" },
+//                                   { subjectIds.at(0), controlTypeIds.at(0), studentIds.at(1), "fine" } })) {
+//            for (short i = 0; i < 4; ++i) {
+//                query->addBindValue(row.at(i));
+//            }
+//            if (!query->exec()) {
+//                return false;
+//            }
+//        }
     }
     return true;
 }
