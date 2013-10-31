@@ -1,18 +1,19 @@
 #ifndef EVALUATIONMODEL_H
 #define EVALUATIONMODEL_H
 
+#include "qt4table-steroids/steroidsmodel.h"
 #include <QSqlRelationalTableModel>
 
-class EvaluationModel : public QSqlRelationalTableModel
+class EvaluationModel : public SteroidsModel<QSqlRelationalTableModel>
 {
     Q_OBJECT
 public:
     explicit EvaluationModel(QObject *parent = 0);
-    
+
 signals:
-    
+
 public slots:
-    
+
 };
 
 #endif // EVALUATIONMODEL_H

@@ -31,9 +31,9 @@ SOURCES += main.cpp \
     studentmodel.cpp \
     subjectmodel.cpp \
     subjectwidget.cpp \
-    evaluationwidet.cpp \
     evaluationmodel.cpp \
-    documentgenerator.cpp
+    documentgenerator.cpp \
+    evaluationwidget.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
@@ -50,9 +50,9 @@ HEADERS  += mainwindow.h \
     studentmodel.h \
     subjectmodel.h \
     subjectwidget.h \
-    evaluationwidet.h \
     evaluationmodel.h \
-    documentgenerator.h
+    documentgenerator.h \
+    evaluationwidget.h
 
 FORMS    += mainwindow.ui
 

@@ -16,6 +16,9 @@
 #include "studentwidget.h"
 #include "subjectwidget.h"
 
+//#include <QDate>
+//#include "documentgenerator.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -25,6 +28,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
     tabWidget->hide();
     ui->centralWidget->layout()->addWidget(tabWidget);
+//    DocumentGenerator::generateExamList("/home/39/stuff/vboxshare/vedomost.docx",
+//                                        "/home/39/stuff/vboxshare/vedomost_patched.docx", "II", "2012/2013",
+//                                        "Механизации", "МХ-41", "4", "560100",
+//                                        "Управление подразделениями в мирное время", "п-п/к запаса Стешенко А.Ф.",
+//                                        QDate::currentDate(),
+//    { "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
+//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
+//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
+//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович" });
 //    QSettings settings(QApplication::applicationDirPath() + QDir::separator() + "settings.ini", QSettings::IniFormat);
 //    if (settings.contains("base")) {
 //        if (!Database::open(settings.value("base").toString())) {
