@@ -7,7 +7,6 @@ TeacherWidget::TeacherWidget(QWidget *parent) :
 {
     mainLayout = new QVBoxLayout(this);
     controlsLayout = new QHBoxLayout();
-    view = new SteroidsView(this);
     model = new TeacherModel(view);
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
     view->setModel(model);

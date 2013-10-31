@@ -21,9 +21,9 @@ StudentWidget::StudentWidget(QWidget *parent) :
     BaseWidget(parent)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    view = new SteroidsView(this);
     mainLayout->addWidget(view);
     model = new StudentModel(view);
+    connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged));
     view->setModel(model);
     mainLayout->addLayout(createControlsLayout());
 }
