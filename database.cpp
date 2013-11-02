@@ -35,7 +35,8 @@ bool Database::init(QString fileName, bool test)
             "  name TEXT NOT NULL UNIQUE,"
             "  graduated_from_university_in INTEGER,"
             "  faculty_id INTEGER REFERENCES faculty (id) NOT NULL"
-            ");"
+            ");" // каждый взвод жёстко связан со группой. Если во взводу несколько групп, при формировании ведомости
+            // на взвод, будут сформированы ведомости на каждую университетскую группу
             "CREATE TABLE expulsion_reason ("
             "  id INTEGER PRIMARY KEY,"
             "  reason TEXT NOT NULL"
