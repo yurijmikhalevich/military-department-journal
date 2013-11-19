@@ -104,16 +104,16 @@ void MainWindow::initControls()
 {
     ui->centralWidget->setEnabled(true);
     ui->emblem->hide();
-    tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluation"));
-    tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
-    tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
     tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));
-    tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
-    tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Professions"));
-    tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-//    for (int i = 0; i < tabWidget->count(); ++i) {
-//        connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
-//                this, SLOT(displayError(QString)));
-//    }
+//    tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluation"));
+//    tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
+//    tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
+//    tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
+//    tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Professions"));
+//    tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
+    for (int i = 0; i < tabWidget->count(); ++i) {
+        connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
+                this, SLOT(displayError(QString)));
+    }
     tabWidget->show();
 }

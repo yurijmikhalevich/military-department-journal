@@ -5,10 +5,10 @@
 TeacherModel::TeacherModel(QObject *parent) :
     SteroidsModel<QSqlTableModel>(parent)
 {
-    setTable("teacher");
-    setHeaderData(1, Qt::Horizontal, tr("Name"));
-    setHeaderData(2, Qt::Horizontal, tr("Dismissed"));
-    showDismissed(false);
+    this->setTable("teacher");
+    this->setHeaderData(1, Qt::Horizontal, tr("Dismissed"));
+    this->setHeaderData(2, Qt::Horizontal, tr("Name"));
+    this->showDismissed(false);
 }
 
 void TeacherModel::showDismissed(bool show)

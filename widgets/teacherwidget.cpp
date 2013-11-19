@@ -10,7 +10,7 @@ TeacherWidget::TeacherWidget(QWidget *parent) :
     model = new TeacherModel(view);
     connect(this, SIGNAL(queryChanged(QString)), model, SLOT(queryChanged(QString)));
     view->setModel(model);
-    view->setItemDelegateForColumn(2, new CheckBoxDelegate(view));
+    view->setItemDelegateForColumn(1, new CheckBoxDelegate(view));
     showDismissedCheckBox = new QCheckBox(tr("Show dismissed"), this);
     connect(showDismissedCheckBox, SIGNAL(toggled(bool)), model, SLOT(showDismissed(bool)));
     teacherName = new QLineEdit(this);
@@ -38,11 +38,15 @@ void TeacherWidget::teacherNameChanged(QString name)
 
 void TeacherWidget::addTeacher()
 {
-    if (teacherName->text().isEmpty()) {
+    QString name = teacherName->text().simplified();
+    if (name.isEmpty()) {
+        teacherName->setFocus();
+        emit error(tr("Teacher name shouldn't be empty"));
         return;
     }
-    model->insertRow(model->rowCount());
-    model->setData(model->index(model->rowCount() - 1, 1), teacherName->text());
-    teacherName->clear();
-    model->submit();
+    QVariantMap newTeacher;
+    newTeacher.insert("name", name);
+    if (insertRecord(newTeacher)) {
+        teacherName->clear();
+    }
 }
