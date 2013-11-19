@@ -6,7 +6,7 @@
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
 #include "qt4table-steroids/spinboxdelegate.h"
-#include "universitygroupmodel.h"
+#include "models/universitygroupmodel.h"
 
 UniversityGroupWidget::UniversityGroupWidget(QWidget *parent) :
     BaseWidget(parent)

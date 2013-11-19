@@ -8,14 +8,14 @@
 #include <QSettings>
 
 #include "database.h"
-#include "basewidget.h"
-#include "universitygroupwidget.h"
-#include "militaryprofessionwidget.h"
-#include "teacherwidget.h"
-#include "troopwidget.h"
-#include "studentwidget.h"
-#include "subjectwidget.h"
-#include "evaluationwidget.h"
+#include "widgets/basewidget.h"
+#include "widgets/universitygroupwidget.h"
+#include "widgets/militaryprofessionwidget.h"
+#include "widgets/teacherwidget.h"
+#include "widgets/troopwidget.h"
+#include "widgets/studentwidget.h"
+#include "widgets/subjectwidget.h"
+#include "widgets/evaluationwidget.h"
 
 //#include <QDate>
 //#include "documentgenerator.h"

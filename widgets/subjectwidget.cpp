@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QSqlQuery>
 #include <QSqlError>
-#include "subjectmodel.h"
+#include "models/subjectmodel.h"
 
 SubjectWidget::SubjectWidget(QWidget *parent) :
     BaseWidget(parent)

@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QSqlRecord>
 #include "qt4table-steroids/tablehelper.h"
-#include "evaluationmodel.h"
+#include "models/evaluationmodel.h"
 #include "documentgenerator.h"
 
 EvaluationWidget::EvaluationWidget(QWidget *parent) :

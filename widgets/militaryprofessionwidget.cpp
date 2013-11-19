@@ -4,7 +4,7 @@
 #include <QSqlError>
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
-#include "militaryprofessionmodel.h"
+#include "models/militaryprofessionmodel.h"
 
 MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent) :
     BaseWidget(parent)

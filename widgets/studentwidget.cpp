@@ -13,7 +13,7 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include "qt4table-steroids/tablehelper.h"
-#include "studentmodel.h"
+#include "models/studentmodel.h"
 
 QNetworkAccessManager *StudentWidget::networkManager = new QNetworkAccessManager();
 

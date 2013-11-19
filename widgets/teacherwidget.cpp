@@ -1,6 +1,6 @@
 #include "teacherwidget.h"
 #include "qt4table-steroids/checkboxdelegate.h"
-#include "teachermodel.h"
+#include "models/teachermodel.h"
 
 TeacherWidget::TeacherWidget(QWidget *parent) :
     BaseWidget(parent)
