@@ -27,7 +27,7 @@ TeacherWidget::TeacherWidget(QWidget *parent) :
     mainLayout->addLayout(controlsLayout);
 }
 
-void TeacherWidget::teacherNameChanged(QString name)
+void TeacherWidget::teacherNameChanged(const QString name)
 {
     if (name.isEmpty()) {
         addTeacherButton->setDisabled(true);

@@ -12,7 +12,7 @@ Database::Database(QObject *parent) :
 {
 }
 
-bool Database::init(QString fileName, bool test)
+bool Database::init(const QString fileName, const bool test)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(fileName);
@@ -170,7 +170,7 @@ bool Database::init(QString fileName, bool test)
     return true;
 }
 
-bool Database::open(QString fileName)
+bool Database::open(const QString fileName)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(fileName);
@@ -188,7 +188,7 @@ QVariant Database::execQueryAndReturnId(QSqlQuery *query)
     return query->lastInsertId();
 }
 
-QVariant Database::execQueryAndReturnId(QSqlQuery *query, QString queryString)
+QVariant Database::execQueryAndReturnId(QSqlQuery *query, const QString queryString)
 {
     if (!query->exec(queryString)) {
         throw query->lastError();

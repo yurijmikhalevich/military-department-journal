@@ -18,13 +18,13 @@ public:
      * @param test If true function will populate database with test data
      * @return true if database was successfully initiated, otherwise returns false
      */
-    static bool init(QString fileName, bool test = false);
+    static bool init(const QString fileName, const bool test = false);
     /**
      * @brief open Opens connection to the SQLite database using embedded Qt server
      * @param fileName Path to SQLite database
      * @return true if connection was successfully established, otherwise returns false
      */
-    static bool open(QString fileName);
+    static bool open(const QString fileName);
 
 private:
     /**
@@ -41,7 +41,7 @@ private:
      * @param queryString Query to execute
      * @return Id of last inserted record
      */
-    static QVariant execQueryAndReturnId(QSqlQuery *query, QString queryString);
+    static QVariant execQueryAndReturnId(QSqlQuery *query, const QString queryString);
     
 };
 

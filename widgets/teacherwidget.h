@@ -24,7 +24,7 @@ private:
 signals:
     void queryChanged(QString query);
 private slots:
-    void teacherNameChanged(QString name);
+    void teacherNameChanged(const QString name);
     void addTeacher();
 };
 
