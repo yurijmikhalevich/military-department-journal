@@ -1,7 +1,6 @@
 #include "database.h"
 
 #include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QSqlError>
 #include <QStringList>
 #include <QSqlRecord>
@@ -13,11 +12,6 @@ Database::Database(QObject *parent) :
 {
 }
 
-/**
- * @param fileName File to store new database
- * @param test If true function will populate database with test data
- * @return true if database was successfully initiated, otherwise returns false
- */
 bool Database::init(QString fileName, bool test)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -26,20 +20,23 @@ bool Database::init(QString fileName, bool test)
         return false;
     }
     QString initScript =
-            "CREATE TABLE faculty ("
+            "CREATE TABLE university_faculty ("
             "  id INTEGER PRIMARY KEY,"
+            "  archived BOOLEAN DEFAULT 0 NOT NULL,"
             "  name TEXT NOT NULL UNIQUE"
             ");"
+            "CREATE INDEX university_faculty_archived ON university_faculty (archived);"
             "CREATE TABLE military_profession ("
             "  id INTEGER PRIMARY KEY,"
             "  archived BOOLEAN DEFAULT 0 NOT NULL,"
-            "  code TEXT UNIQUE,"
-            "  name TEXT UNIQUE"
+            "  code TEXT NOT NULL UNIQUE,"
+            "  name TEXT NOT NULL UNIQUE"
             ");"
+            "CREATE INDEX military_profession_archived ON military_profession (archived);"
             "CREATE TABLE teacher ("
             "  id INTEGER PRIMARY KEY,"
-            "  name TEXT NOT NULL,"
-            "  dismissed BOOLEAN DEFAULT 0 NOT NULL"
+            "  dismissed BOOLEAN DEFAULT 0 NOT NULL,"
+            "  name TEXT NOT NULL"
             ");"
             "CREATE INDEX teacher_dismissed ON teacher (dismissed);"
             "CREATE TABLE troop ("
@@ -47,27 +44,27 @@ bool Database::init(QString fileName, bool test)
             "  name TEXT NOT NULL UNIQUE,"
 //            "  year_of_training INTEGER DEFAULT 1,"
             "  entered_at_military_department_date DATE,"
-            "  graduated_from_military_department_in INTEGER,"
-            "  graduated BOOLEAN DEFAULT 0 NOT NULL,"
+            "  graduated_from_military_department_date DATE,"
+//            "  graduated BOOLEAN DEFAULT 0 NOT NULL,"
             "  curator_id INTEGER REFERENCES teacher (id),"
             "  military_profession_id INTEGER REFERENCES military_profession (id) NOT NULL"
             ");"
             "CREATE TABLE university_group ("
             "  id INTEGER PRIMARY KEY,"
             "  name TEXT NOT NULL UNIQUE,"
-            "  graduated_from_university_in INTEGER,"
-            "  faculty_id INTEGER REFERENCES faculty (id) NOT NULL,"
+            "  graduated_from_university_date DATE,"
+            "  faculty_id INTEGER REFERENCES university_faculty (id) NOT NULL,"
             "  troop_id INTEGER REFERENCES troop (id) NOT NULL"
-            ");" // каждая группа жёстко связана со взводом. Если во взводу несколько групп, при формировании ведомости
-            // на взвод, будут сформированы ведомости на каждую университетскую группу
-            "CREATE TABLE expulsion_reason ("
-            "  id INTEGER PRIMARY KEY,"
-            "  reason TEXT NOT NULL"
             ");"
-            "CREATE TABLE expulsed_from ("
+            // every univeristy group is linked with troop. If troop contains multiple groups, when we generate
+            // exam lists for troop, we shoul generate separate list for every group
+            "CREATE TABLE expulsion_reason (" // we should create that because SQLite does not support ENUMs
             "  id INTEGER PRIMARY KEY,"
-            "  archived BOOLEAN DEFAULT 0 NOT NULL,"
-            "  unit TEXT NOT NULL"
+            "  reason TEXT NOT NULL UNIQUE"
+            ");"
+            "CREATE TABLE expulsed_from (" // we should create that because SQLite does not support ENUMs
+            "  id INTEGER PRIMARY KEY,"
+            "  unit TEXT NOT NULL UNIQUE"
             ");"
             "CREATE TABLE student ("
             "  id INTEGER PRIMARY KEY,"
@@ -81,34 +78,34 @@ bool Database::init(QString fileName, bool test)
             "  firstname_accusative TEXT,"
             "  middlename_accusative TEXT,"
             "  dob DATE,"
-            "  university_group_id INTEGER REFERENCES university_group (id),"
-            "  decree_enrollment_number TEXT,"
-            "  decree_expulsion_number TEXT,"
+            "  university_group_id INTEGER REFERENCES university_group (id) NOT NULL,"
+            "  decree_enrollment_number TEXT," // TODO: discucss about
+            "  decree_expulsion_number TEXT," // TODO: discuss about
             "  expulsion_reason_id INTEGER REFERENCES expulsion_reason (id),"
-            "  expulsed_from_id INTEGER REFERENCES expulsed_from (id),"
-            "  troop_id INTEGER REFERENCES troop (id)"
+            "  expulsed_from_id INTEGER REFERENCES expulsed_from (id)"
             ");"
             "CREATE TABLE subject ("
             "  id INTEGER PRIMARY KEY,"
-            "  name TEXT NOT NULL UNIQUE,"
-            "  archived BOOLEAN DEFAULT 0 NOT NULL"
+            "  archived BOOLEAN DEFAULT 0 NOT NULL,"
+            "  name TEXT NOT NULL UNIQUE"
             ");"
+            "CREATE INDEX subject_archived ON subject (archived);"
             "CREATE TABLE subject_duration ("
             "  subject_id INTEGER REFERENCES subject (id) NOT NULL,"
             "  military_profession_id INTEGER REFERENCES military_profession (id) NOT NULL,"
             "  duration INTEGER NOT NULL"
             ");"
-            "CREATE UNIQUE INDEX subject_duration_unique ON subject_duration (subject_id, troop_id);"
-            "CREATE TABLE control_type (" // that table is preconfigured, used as ENUM
+            "CREATE UNIQUE INDEX subject_duration_unique ON subject_duration (subject_id, military_profession_id);"
+            "CREATE TABLE control_type (" // we should create that because SQLite does not support ENUMs
             "  id INTEGER PRIMARY KEY,"
-            "  name TEXT NOT NULL"
+            "  type TEXT NOT NULL UNIQUE"
             ");"
             "CREATE TABLE evaluation ("
             "  id INTEGER PRIMARY KEY,"
             "  subject_id INTEGER REFERENCES subject (id) NOT NULL,"
             "  control_type_id INTEGER REFERENCES control_type (id) NOT NULL,"
             "  teacher_id INTEGER REFERENCES teacher (id) NOT NULL,"
-            "  university_group_id INTEGER REFERENCES university_group_id (id) NOT NULL,"
+            "  troop_id INTEGER REFERENCES troop (id) NOT NULL,"
             "  date DATE NOT NULL"
             ");"
             "CREATE TABLE mark ("
@@ -118,62 +115,61 @@ bool Database::init(QString fileName, bool test)
             "  teacher_id INTEGER REFERENCES teacher (id)," // filled only if (mark.teacher_id != evaluation.teacher_id)
             "  date DATE" // filled only if (marked.date != evaluation.date)
             ");";
-    for (QString query : initScript.split(';')) {
-        if (db.exec(query).lastError().type() != QSqlError::NoError) {
-            return false;
+    QSqlQuery query;
+    for (QString queryString : initScript.split(';')) {
+        if (!queryString.isEmpty()) {
+            execQueryAndReturnId(&query, queryString);
         }
     }
+    QStringList baseQueries = {
+        "INSERT INTO control_type (type) VALUES ('Exam'), ('Credit')",
+        "INSERT INTO expulsion_reason (reason) VALUES ('Poor progress'), ('Non-attendance'), "
+        "('Violation of the statute')",
+        "INSERT INTO expulsed_from (unit) VALUES ('University'), ('Military Department')"
+    };
+    for (QString queryString : baseQueries) {
+        execQueryAndReturnId(&query, queryString);
+    }
     if (test) {
-        QSqlQuery *query = new QSqlQuery(db);
-        if (!query->exec("INSERT INTO control_type (name) VALUES ('exam'), ('credit'), ('validation')")) {
-            return false;
-        }
-        QVariant id;
-        query->prepare("INSERT INTO faculty (name) VALUES ('AI')");
-        if (!query->exec()) {
-            return false;
-        }
-        id = query->lastInsertId();
-        query->prepare("INSERT INTO university_group (name, faculty_id) VALUES ('AI-0904', ?)");
-        query->addBindValue(id);
-        if (!query->exec()) {
-            return false;
-        }
-        id = query->lastInsertId();
-        query->prepare("INSERT INTO student (lastname, firstname, middlename, lastname_datum, firstname_datum, "
-                       "middlename_datum, university_group_id) VALUES "
-                       "(:lastname, :firstname, :middlename, :lastname_d, :firstname_d, :middlename_d, :id)");
-        query->bindValue(":id", id);
+        QVariant universityFacultyId;
+        QVariant militaryProfessionId;
+        QVariant troopId;
+        QVariant universityGroupId;
         QVariantList studentIds;
-        for (short i = 0; i < 3; ++i) {
-            query->bindValue(":lastname", QString::number(i) + "Lastname");
-            query->bindValue(":firstname", QString::number(i) + "Firstname");
-            query->bindValue(":middlename", QString::number(i) + "Middlename");
-            query->bindValue(":lastname_d", QString::number(i) + "LastnameD");
-            query->bindValue(":firstname_d", QString::number(i) + "FirstnameD");
-            query->bindValue(":middlename_d", QString::number(i) + "MiddlenameD");
-            if (!query->exec()) {
-                return false;
-            }
-            studentIds.append(query->lastInsertId());
-        }
-        query->prepare("INSERT INTO subject (name) VALUES (?)");
         QVariantList subjectIds;
-        for (QString subjectName : { "Wizard trainging", "Sword training", "Jump training" }) {
-            query->addBindValue(subjectName);
-            if (!query->exec()) {
-                return false;
-            }
-            subjectIds.append(query->lastInsertId());
+        universityFacultyId = execQueryAndReturnId(&query, "INSERT INTO university_faculty (name) VALUES ('AI')");
+        militaryProfessionId = execQueryAndReturnId(&query, "INSERT INTO military_profession (code, name) "
+                                                          "VALUES ('VUS-260100', 'Units management')");
+        query.prepare("INSERT INTO troop (name, military_profession_id) VALUES ('AI41', ?)");
+        query.addBindValue(militaryProfessionId);
+        troopId = execQueryAndReturnId(&query);
+        query.prepare("INSERT INTO university_group (name, faculty_id, troop_id) VALUES ('AI-0904', ?, ?)");
+        query.addBindValue(universityFacultyId);
+        query.addBindValue(troopId);
+        universityGroupId = execQueryAndReturnId(&query);
+        query.prepare("INSERT INTO student (lastname, firstname, middlename, lastname_datum, firstname_datum, "
+                      "middlename_datum, university_group_id) VALUES "
+                      "(:lastname, :firstname, :middlename, :lastname_d, :firstname_d, :middlename_d, "
+                      ":university_group_id)");
+        query.bindValue(":university_group_id", universityGroupId);
+        for (short i = 0; i < 3; ++i) {
+            query.bindValue(":lastname", QString::number(i) + "Lastname");
+            query.bindValue(":firstname", QString::number(i) + "Firstname");
+            query.bindValue(":middlename", QString::number(i) + "Middlename");
+            query.bindValue(":lastname_d", QString::number(i) + "LastnameD");
+            query.bindValue(":firstname_d", QString::number(i) + "FirstnameD");
+            query.bindValue(":middlename_d", QString::number(i) + "MiddlenameD");
+            studentIds.append(execQueryAndReturnId(&query));
+        }
+        query.prepare("INSERT INTO subject (name) VALUES (?)");
+        for (QString subjectName : { "Wizard training", "Sword training", "Bebop training" }) {
+            query.addBindValue(subjectName);
+            subjectIds.append(execQueryAndReturnId(&query));
         }
     }
     return true;
 }
 
-/**
- * @param fileName File with application database
- * @return true if operation completes successfully, otherwise returns false
- */
 bool Database::open(QString fileName)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -182,4 +178,20 @@ bool Database::open(QString fileName)
         return false;
     }
     return true;
+}
+
+QVariant Database::execQueryAndReturnId(QSqlQuery *query)
+{
+    if (!query->exec()) {
+        throw query->lastError();
+    }
+    return query->lastInsertId();
+}
+
+QVariant Database::execQueryAndReturnId(QSqlQuery *query, QString queryString)
+{
+    if (!query->exec(queryString)) {
+        throw query->lastError();
+    }
+    return query->lastInsertId();
 }

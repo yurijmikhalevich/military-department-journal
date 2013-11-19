@@ -75,9 +75,9 @@ void MainWindow::on_action_New_triggered()
     if (fileName.isEmpty()) {
         return;
     }
-    QFile *file = new QFile(fileName);
-    if (file->exists()) {
-        file->remove();
+    QFile file(fileName);
+    if (file.exists()) {
+        file.remove();
     }
     if (!Database::init(fileName, true)) {
         displayError(tr("Cannot init database"));
@@ -111,9 +111,9 @@ void MainWindow::initControls()
     tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("University Groups"));
     tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Military Professions"));
     tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-    for (int i = 0; i < tabWidget->count(); ++i) {
-        connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
-                this, SLOT(displayError(QString)));
-    }
+//    for (int i = 0; i < tabWidget->count(); ++i) {
+//        connect(static_cast<BaseWidget *>(tabWidget->widget(i)), SIGNAL(error(QString)),
+//                this, SLOT(displayError(QString)));
+//    }
     tabWidget->show();
 }
