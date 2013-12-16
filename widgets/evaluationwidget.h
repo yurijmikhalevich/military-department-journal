@@ -6,23 +6,21 @@
 #include <QComboBox>
 #include <QDateEdit>
 
-class EvaluationWidget : public BaseWidget
-{
-    Q_OBJECT
+class EvaluationWidget : public BaseWidget {
+  Q_OBJECT
 public:
-    explicit EvaluationWidget(QWidget *parent = 0);
+  explicit EvaluationWidget(QWidget *parent = 0);
 private:
-    QPushButton *addEvaluationButton;
-    QPushButton *generateEvaluationListButton;
-    QComboBox *subjectEdit;
-    QComboBox *controlTypeEdit;
-    QComboBox *teacherEdit;
-    QComboBox *universityGroupEdit;
-    QDateEdit *dateEdit;
+  QPushButton *addEvaluationButton;
+  QPushButton *generateEvaluationListButton;
+  QComboBox *subjectEdit;
+  QComboBox *controlTypeEdit;
+  QComboBox *teacherEdit;
+  QComboBox *troopEdit;
+  QDateEdit *dateEdit;
 private slots:
-    void addEvaluation();
-    void generateEvaluationList();
-
+  void addEvaluation();
+  void generateEvaluationList();
 };
 
 #endif // EVALUATIONWIDGET_H

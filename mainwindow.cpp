@@ -104,6 +104,7 @@ void MainWindow::on_action_Open_triggered() {
 void MainWindow::initControls() {
   ui->centralWidget->setEnabled(true);
   ui->emblem->hide();
+  tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluations"));
   tabWidget->addTab(new SubjectDurationWidget(tabWidget),
                     tr("Subjects Duration"));
   tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
