@@ -7,16 +7,15 @@
 /**
  * @brief The TroopModel class
  */
-class TroopModel : public SteroidsModel<QSqlRelationalTableModel>
-{
-    Q_OBJECT
+class TroopModel : public SteroidsModel<QSqlRelationalTableModel> {
+  Q_OBJECT
 public:
-    explicit TroopModel(QObject *parent = 0);
-    QVariant data(const QModelIndex &item, int role) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    int columnCount(const QModelIndex &) const;
+  explicit TroopModel(QObject *parent = 0);
+  QVariant data(const QModelIndex &item, int role) const;
+  Qt::ItemFlags flags(const QModelIndex &index) const;
+  int columnCount(const QModelIndex &) const;
 public slots:
-    void queryChanged(QString query);
+  void queryChanged(QString query);
 };
 
 #endif // TROOPMODEL_H

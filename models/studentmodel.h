@@ -4,13 +4,12 @@
 #include "qt4table-steroids/steroidsmodel.h"
 #include <QSqlRelationalTableModel>
 
-class StudentModel : public SteroidsModel<QSqlRelationalTableModel>
-{
-    Q_OBJECT
+class StudentModel : public SteroidsModel<QSqlRelationalTableModel> {
+  Q_OBJECT
 public:
-    explicit StudentModel(QObject *parent = 0);
+  explicit StudentModel(QObject *parent = 0);
 public slots:
-    void queryChanged(QString query);
+  void queryChanged(QString query);
 };
 
 #endif // STUDENTMODEL_H

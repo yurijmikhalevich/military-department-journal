@@ -6,7 +6,9 @@
 
 QT       += core gui sql network
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
+LIBS += -stdlib=libc++
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +33,9 @@ HEADERS += \
     models/militaryprofessionmodel.h \
     models/studentmodel.h \
     models/subjectmodel.h \
-    models/evaluationmodel.h
+    models/evaluationmodel.h \
+    models/subjectdurationmodel.h \
+    models/universityfacultymodel.h
 
 SOURCES += \
     models/universitygroupmodel.cpp \
@@ -40,9 +44,12 @@ SOURCES += \
     models/militaryprofessionmodel.cpp \
     models/studentmodel.cpp \
     models/subjectmodel.cpp \
-    models/evaluationmodel.cpp
+    models/evaluationmodel.cpp \
+    models/universityfacultymodel.cpp \
+    models/subjectdurationmodel.cpp
 
 HEADERS += \
+    widgets/universityfacultywidget.h \
     widgets/basewidget.h \
     widgets/universitygroupwidget.h \
     widgets/teacherwidget.h \
@@ -50,9 +57,11 @@ HEADERS += \
     widgets/militaryprofessionwidget.h \
     widgets/studentwidget.h \
     widgets/subjectwidget.h \
-    widgets/evaluationwidget.h
+    widgets/evaluationwidget.h \
+    widgets/subjectdurationwidget.h
 
 SOURCES += \
+    widgets/universityfacultywidget.cpp \
     widgets/basewidget.cpp \
     widgets/troopwidget.cpp \
     widgets/universitygroupwidget.cpp \
@@ -60,7 +69,8 @@ SOURCES += \
     widgets/militaryprofessionwidget.cpp \
     widgets/studentwidget.cpp \
     widgets/subjectwidget.cpp \
-    widgets/evaluationwidget.cpp
+    widgets/evaluationwidget.cpp \
+    widgets/subjectdurationwidget.cpp
 
 FORMS    += mainwindow.ui
 

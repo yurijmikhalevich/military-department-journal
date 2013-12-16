@@ -4,16 +4,10 @@
 #include "qt4table-steroids/steroidsmodel.h"
 #include <QSqlRelationalTableModel>
 
-class EvaluationModel : public SteroidsModel<QSqlRelationalTableModel>
-{
-    Q_OBJECT
+class EvaluationModel : public SteroidsModel<QSqlRelationalTableModel> {
+  Q_OBJECT
 public:
-    explicit EvaluationModel(QObject *parent = 0);
-
-signals:
-
-public slots:
-
+  explicit EvaluationModel(QObject *parent = 0);
 };
 
 #endif // EVALUATIONMODEL_H

@@ -9,20 +9,20 @@
 #include <QComboBox>
 #include <QPushButton>
 
-class TroopWidget : public BaseWidget
-{
-    Q_OBJECT
+class TroopWidget : public BaseWidget {
+  Q_OBJECT
 public:
-    explicit TroopWidget(QWidget *parent = 0);
+  explicit TroopWidget(QWidget *parent = 0);
 private:
-    QVBoxLayout *mainLayout;
-    QHBoxLayout *controlsLayout;
-    QLineEdit *nameEdit;
-    QSpinBox *ygmEdit;
-    QComboBox *curatorEdit;
-    QPushButton *addTroopButton;
+  QVBoxLayout *mainLayout;
+  QHBoxLayout *controlsLayout;
+  QLineEdit *nameEdit;
+  QSpinBox *graduatedInEdit;
+  QComboBox *curatorEdit;
+  QComboBox *professionEdit;
+  QPushButton *addTroopButton;
 private slots:
-    void addTroop();
+  void addTroop();
 };
 
 #endif // TROOPWIDGET_H
