@@ -18,6 +18,7 @@
 #include "widgets/evaluationwidget.h"
 #include "widgets/universityfacultywidget.h"
 #include "widgets/subjectdurationwidget.h"
+#include "widgets/markwidget.h"
 
 //#include <QDate>
 //#include "documentgenerator.h"
@@ -71,14 +72,10 @@ void MainWindow::onCurrentTabChanged(int newTabIndex) {
 
 void MainWindow::on_action_New_triggered() {
   QString fileName = QFileDialog::getSaveFileName(
-        this, tr("Enter filename"), QDir::currentPath(),
+        this, tr("Выберите файл"), QDir::currentPath(),
         tr("Journal (*.mdj)"));
   if (fileName.isEmpty()) {
     return;
-  }
-  QFile file(fileName);
-  if (file.exists()) {
-    file.remove();
   }
   if (!Database::init(fileName, true)) {
     displayError(tr("Cannot init database"));
@@ -104,17 +101,19 @@ void MainWindow::on_action_Open_triggered() {
 void MainWindow::initControls() {
   ui->centralWidget->setEnabled(true);
   ui->emblem->hide();
-  tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluations"));
-  tabWidget->addTab(new SubjectDurationWidget(tabWidget),
-                    tr("Subjects Duration"));
-  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
-  tabWidget->addTab(new UniversityGroupWidget(tabWidget),
-                    tr("University Groups"));
-  tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
-  tabWidget->addTab(new MilitaryProfessionWidget(tabWidget), tr("Professions"));
-  tabWidget->addTab(new UniversityFacultyWidget(tabWidget), tr("Faculties"));
-  tabWidget->addTab(new TeacherWidget(tabWidget), tr("Teachers"));
+//  tabWidget->addTab(new MarkWidget(tabWidget), tr("Marks"));
+//  tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluations"));
+//  tabWidget->addTab(new SubjectDurationWidget(tabWidget),
+//                    tr("Subjects Duration"));
+//  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
+//  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
+//  tabWidget->addTab(new UniversityGroupWidget(tabWidget),
+//                    tr("University Groups"));
+//  tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
+  tabWidget->addTab(new MilitaryProfessionWidget(tabWidget),
+                    tr("Специальности"));
+  tabWidget->addTab(new UniversityFacultyWidget(tabWidget), tr("Факультеты"));
+  tabWidget->addTab(new TeacherWidget(tabWidget), tr("Преподаватели"));
   for (int i = 0; i < tabWidget->count(); ++i) {
     connect(static_cast<BaseWidget *>(tabWidget->widget(i)),
             SIGNAL(error(QString)), this, SLOT(displayError(QString)));

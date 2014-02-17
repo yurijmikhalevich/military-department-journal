@@ -13,13 +13,11 @@ class UniversityFacultyWidget : public BaseWidget {
   Q_OBJECT
 public:
   explicit UniversityFacultyWidget(QWidget *parent = 0);
-    
 private:
   QVBoxLayout *mainLayout;
   QHBoxLayout *controlsLayout;
   QLineEdit *newFacultyName;
   QPushButton *addNewButton;
-
 private slots:
   void invalidInputReceived(QString &input);
   void newFacultyNameTextChanged(QString text);

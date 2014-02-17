@@ -1,8 +1,5 @@
 #include "universityfacultywidget.h"
-
 #include <QDate>
-#include <QSqlError>
-#include <QSqlQuery>
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
 #include "qt4table-steroids/spinboxdelegate.h"
@@ -52,16 +49,10 @@ void UniversityFacultyWidget::newFacultyNameTextChanged(QString text) {
 
 void UniversityFacultyWidget::createNewFaculty() {
   if (newFacultyName->text().isEmpty()) {
+    emit error(tr("Faculty name shouldn't be empty"));
     return;
   }
-  QSqlQuery query;
-  query.prepare("INSERT INTO university_faculty (name) VALUES (?)");
-  query.addBindValue(newFacultyName->text());
-  if (!query.exec()) {
-    emit error(QString(tr("There is an error occured while inserting"
-                          " into database: «%1»")).arg(
-                 query.lastError().text()));
-  } else {
+  if (insertRecord({{"name", newFacultyName->text()}})) {
     newFacultyName->clear();
     model->select();
   }

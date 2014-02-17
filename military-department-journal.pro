@@ -6,25 +6,29 @@
 
 QT       += core gui sql network
 
-QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
-LIBS += -stdlib=libc++
-QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
+QMAKE_CXXFLAGS += -std=c++11
+
+macosx {
+  QMAKE_CXXFLAGS += -stdlib=libc++
+  LIBS += -stdlib=libc++
+  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.7
+}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = military-department-journal
 TEMPLATE = app
 
-LIBS += -lz
-
 SOURCES += main.cpp \
     mainwindow.cpp \
     database.cpp \
-    documentgenerator.cpp
+    documentgenerator.cpp \
+    csvoldformatconverter.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
-    documentgenerator.h
+    documentgenerator.h \
+    csvoldformatconverter.h
 
 HEADERS += \
     models/universitygroupmodel.h \
@@ -35,7 +39,8 @@ HEADERS += \
     models/subjectmodel.h \
     models/evaluationmodel.h \
     models/subjectdurationmodel.h \
-    models/universityfacultymodel.h
+    models/universityfacultymodel.h \
+    models/markmodel.h
 
 SOURCES += \
     models/universitygroupmodel.cpp \
@@ -46,7 +51,8 @@ SOURCES += \
     models/subjectmodel.cpp \
     models/evaluationmodel.cpp \
     models/universityfacultymodel.cpp \
-    models/subjectdurationmodel.cpp
+    models/subjectdurationmodel.cpp \
+    models/markmodel.cpp
 
 HEADERS += \
     widgets/universityfacultywidget.h \
@@ -58,7 +64,8 @@ HEADERS += \
     widgets/studentwidget.h \
     widgets/subjectwidget.h \
     widgets/evaluationwidget.h \
-    widgets/subjectdurationwidget.h
+    widgets/subjectdurationwidget.h \
+    widgets/markwidget.h
 
 SOURCES += \
     widgets/universityfacultywidget.cpp \
@@ -70,7 +77,8 @@ SOURCES += \
     widgets/studentwidget.cpp \
     widgets/subjectwidget.cpp \
     widgets/evaluationwidget.cpp \
-    widgets/subjectdurationwidget.cpp
+    widgets/subjectdurationwidget.cpp \
+    widgets/markwidget.cpp
 
 FORMS    += mainwindow.ui
 

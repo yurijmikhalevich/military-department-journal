@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QSqlRecord>
 #include <QVariant>
+#include <QFile>
 #include <QDebug>
 
 Database::Database(QObject *parent)
@@ -12,6 +13,10 @@ Database::Database(QObject *parent)
 }
 
 bool Database::init(const QString fileName, const bool test) {
+  QFile file(fileName);
+  if (file.exists()) {
+    file.remove();
+  }
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
   db.setDatabaseName(fileName);
   if (!db.open()) {
@@ -41,11 +46,17 @@ bool Database::init(const QString fileName, const bool test) {
       "CREATE INDEX teacher_dismissed ON teacher (dismissed);"
       "CREATE TABLE troop ("
       "  id INTEGER PRIMARY KEY,"
-      "  name TEXT NOT NULL UNIQUE,"
-//      "  year_of_training INTEGER DEFAULT 1,"
+      "  name_prefix TEXT NOT NULL," // for example "ПИ"
+      "  name_start_year INTEGER NOT NULL CHECK (name_start_year >= 1),"
+      // for example "3"
+      "  name_number INTEGER NOT NULL CHECK (name_number >= 1),"
+      // for example "1"
+      // as result of these three fields, there are calculated column for
+      // troop name as "ПИ-31" at first year of its education, "ПИ-41", after
+      // the second year of its education (and so on, before we reach the date
+      // specified in "graduated_from_military_department_date" field
       "  entered_at_military_department_date DATE,"
       "  graduated_from_military_department_date DATE,"
-//      "  graduated BOOLEAN DEFAULT 0 NOT NULL,"
       "  curator_id INTEGER REFERENCES teacher (id),"
       "  military_profession_id INTEGER REFERENCES military_profession (id)"
       "   NOT NULL"
@@ -130,11 +141,11 @@ bool Database::init(const QString fileName, const bool test) {
     }
   }
   QStringList baseQueries = {
-    "INSERT INTO control_type (type) VALUES ('Exam'), ('Credit')",
-    "INSERT INTO expulsion_reason (reason) VALUES ('Poor progress'),"
-    " ('Non-attendance'), ('Violation of the statute')",
-    "INSERT INTO expulsed_from (unit) VALUES ('University'),"
-    " ('Military Department')"
+    "INSERT INTO control_type (type) VALUES ('Экзамен'), ('Зачёт')",
+    "INSERT INTO expulsion_reason (reason) VALUES ('Плохая успеваемость'),"
+    " ('Непосещаемость'), ('Нарушение устава')",
+    "INSERT INTO expulsed_from (unit) VALUES ('Университет'),"
+    " ('Военная кафедра')"
   };
   for (QString queryString : baseQueries) {
     execQueryAndReturnId(&query, queryString);
