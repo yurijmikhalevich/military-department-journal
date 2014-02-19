@@ -1,7 +1,6 @@
 #ifndef CSVOLDFORMATCONVERTER_H
 #define CSVOLDFORMATCONVERTER_H
 
-#include <QObject>
 #include <QString>
 #include <QSqlDatabase>
 #include <QFile>
@@ -26,14 +25,14 @@ int getTroopId(QString troopName, QString graduatedFromMilitaryDepartmentDate,
                QString degreeEnrollmentNumber,
                QString graduatedFromMilitaryDepartmentInYear);
 int getFacultyId(QString groupNamePrefix);
-QString VAT = "Восстановление автомобильной техники";
-QString UPVMV = "Управление подразделениями в мирное время";
-QString PDD = "Правила дорожного движения";
-QString TSP = "Тактико-специальная подготовка";
-QString TP = "Тактическая подготовка";
-QString UAT = "Устройство автомобильной техники";
-QString EAT = "Эксплуатация автомобильной техники";
-QString OGP = "Общегосударственная подготовка";
+const QString VAT = "Восстановление автомобильной техники";
+const QString UPVMV = "Управление подразделениями в мирное время";
+const QString PDD = "Правила дорожного движения";
+const QString TSP = "Тактико-специальная подготовка";
+const QString TP = "Тактическая подготовка";
+const QString UAT = "Устройство автомобильной техники";
+const QString EAT = "Эксплуатация автомобильной техники";
+const QString OGP = "Общегосударственная подготовка";
 }
 
 #endif // CSVOLDFORMATCONVERTER_H

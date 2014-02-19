@@ -119,9 +119,9 @@ bool CSVOldFormatConverter::convertStudents(QString csvDirPath) {
 
 bool CSVOldFormatConverter::fillSubjects(QString) {
   QSqlQuery query;
-  QString queryString = "INSERT INTO subject (name) VALUES (" + VAT + "), (" +
-      UPVMV + "), (" + PDD + "), (" + TSP + "), (" + TP + "), (" + UAT +
-      "), (" + EAT + "), (" + OGP + ")";
+  QString queryString = "INSERT INTO subject (name) VALUES ('" + VAT +
+      "'), ('" + UPVMV + "'), ('" + PDD + "'), ('" + TSP + "'), ('" + TP +
+      "'), ('" + UAT + "'), ('" + EAT + "'), ('" + OGP + "')";
   if (!query.exec(queryString)) {
     return false;
   }
