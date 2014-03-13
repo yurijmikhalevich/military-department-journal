@@ -46,21 +46,18 @@ bool Database::init(const QString fileName, const bool test) {
       "CREATE INDEX teacher_dismissed ON teacher (dismissed);"
       "CREATE TABLE troop ("
       "  id INTEGER PRIMARY KEY,"
-      "  name_prefix TEXT NOT NULL," // for example "ПИ"
-      "  name_start_year INTEGER NOT NULL CHECK (name_start_year >= 1),"
-      // for example "3"
-      "  name_number INTEGER NOT NULL CHECK (name_number >= 1),"
-      // for example "1"
-      // as result of these three fields, there are calculated column for
-      // troop name as "ПИ-31" at first year of its education, "ПИ-41", after
-      // the second year of its education (and so on, before we reach the date
-      // specified in "graduated_from_military_department_date" field
+      "  name TEXT NOT NULL,"
+      // pattern-based name, like "ПИЭ-<N:2>1/<N:3>1" or "ПИ-<N:2>1"
+      // we will increase pattern placeholder every next year after the year
+      // of entrance until the year of graduation
       "  entered_at_military_department_date DATE,"
       "  graduated_from_military_department_date DATE,"
       "  curator_id INTEGER REFERENCES teacher (id),"
       "  military_profession_id INTEGER REFERENCES military_profession (id)"
       "   NOT NULL"
       ");"
+      "CREATE UNIQUE INDEX troop_name_unique ON"
+      "  troop (name, entered_at_military_department_date);"
       "CREATE TABLE university_group ("
       "  id INTEGER PRIMARY KEY,"
       "  name TEXT NOT NULL UNIQUE,"
@@ -122,14 +119,22 @@ bool Database::init(const QString fileName, const bool test) {
       "  id INTEGER PRIMARY KEY,"
       "  subject_id INTEGER REFERENCES subject (id) NOT NULL,"
       "  control_type_id INTEGER REFERENCES control_type (id) NOT NULL,"
-      "  teacher_id INTEGER REFERENCES teacher (id) NOT NULL,"
+      "  teacher_id INTEGER REFERENCES teacher (id),"
       "  troop_id INTEGER REFERENCES troop (id) NOT NULL,"
       "  date DATE NOT NULL"
+      ");"
+      "CREATE UNIQUE INDEX evaluation_unique"
+      " ON evaluation (subject_id, control_type_id, troop_id, date);"
+      // CONVERSION PROCEDURE RELATED NOTICE: if date is unknown it will
+      // be filled with unixtime start date: 1970-01-01
+      "CREATE TABLE mark_value ("
+      "  id INTEGER PRIMARY KEY,"
+      "  name TEXT UNIQUE NOT NULL"
       ");"
       "CREATE TABLE mark ("
       "  evaluation_id INTEGER REFERENCES evaluation (id) NOT NULL,"
       "  student_id INTEGER REFERENCES student (id) NOT NULL,"
-      "  value INTEGER NOT NULL,"
+      "  value INTEGER REFERENCES mark_value (id) NOT NULL,"
       "  teacher_id INTEGER REFERENCES teacher (id),"
       // teacher_id filled only if (mark.teacher_id != evaluation.teacher_id)
       "  date DATE" // filled only if (marked.date != evaluation.date)
@@ -141,11 +146,15 @@ bool Database::init(const QString fileName, const bool test) {
     }
   }
   QStringList baseQueries = {
-    "INSERT INTO control_type (type) VALUES ('Экзамен'), ('Зачёт')",
+    "INSERT INTO control_type (type) VALUES ('Экзамен'), ('Зачёт'),"
+    " ('Аттестация')",
     "INSERT INTO expulsion_reason (reason) VALUES ('Плохая успеваемость'),"
     " ('Непосещаемость'), ('Нарушение устава')",
     "INSERT INTO expulsed_from (unit) VALUES ('Университет'),"
-    " ('Военная кафедра')"
+    " ('Военная кафедра')",
+    "INSERT INTO mark_value (id, name) VALUES (5, 'Отлично'), (4, 'Хорошо'),"
+    " (3, 'Удовлетворительно'), (2, 'Неудовлетворительно'), (1, 'Сдал'),"
+    " (0, 'Не сдал'), (-1, 'Не явился'), (-2, 'Не допущен')"
   };
   for (QString queryString : baseQueries) {
     execQueryAndReturnId(&query, queryString);

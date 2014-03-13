@@ -10,9 +10,11 @@ TroopModel::TroopModel(QObject *parent)
   setJoinMode(QSqlRelationalTableModel::LeftJoin);
   setRelation(4, QSqlRelation("teacher", "id", "name"));
   setRelation(5, QSqlRelation("military_profession", "id", "name"));
-  setHeaderData(1, Qt::Horizontal, tr("Troop"));
+  setHeaderData(1, Qt::Horizontal, tr("Name"));
   setHeaderData(2, Qt::Horizontal, tr("Entered in"));
-  setHeaderData(3, Qt::Horizontal, tr("Graduated in", "Year of graduation from Faculty of Military Training"));
+  setHeaderData(3, Qt::Horizontal,
+                tr("Graduated in",
+                   "Year of graduation from Faculty of Military Training"));
   setHeaderData(4, Qt::Horizontal, tr("Curator"));
   setHeaderData(5, Qt::Horizontal, tr("Profession"));
   setHeaderData(6, Qt::Horizontal, tr("Students"));
@@ -40,7 +42,7 @@ Qt::ItemFlags TroopModel::flags(const QModelIndex &index) const {
 }
 
 int TroopModel::columnCount(const QModelIndex &) const {
-  return 7;
+  return 6;
 }
 
 void TroopModel::queryChanged(QString query) {

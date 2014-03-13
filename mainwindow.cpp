@@ -22,6 +22,8 @@
 
 //#include <QDate>
 //#include "documentgenerator.h"
+#include "csvoldformatconverter.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -32,6 +34,12 @@ MainWindow::MainWindow(QWidget *parent)
           this, SLOT(onCurrentTabChanged(int)));
   tabWidget->hide();
   ui->centralWidget->layout()->addWidget(tabWidget);
+  ui->emblem->hide();
+  qDebug() << CSVOldFormatConverter::convertDatabase(
+                "/Users/y/Downloads/stuff/vboxshare/war-database-csv",
+                "/Users/y/mdj-converted.mdj");
+//                "E:/war-database-csv",
+//                "C:/mdj-converted.mdj");
 //    DocumentGenerator::generateExamList("/home/39/stuff/vboxshare/vedomost.docx",
 //                                        "/home/39/stuff/vboxshare/vedomost_patched.docx", "II", "2012/2013",
 //                                        "Механизации", "МХ-41", "4", "560100",
@@ -106,10 +114,10 @@ void MainWindow::initControls() {
 //  tabWidget->addTab(new SubjectDurationWidget(tabWidget),
 //                    tr("Subjects Duration"));
 //  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-//  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
-//  tabWidget->addTab(new UniversityGroupWidget(tabWidget),
-//                    tr("University Groups"));
-//  tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
+  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
+  tabWidget->addTab(new UniversityGroupWidget(tabWidget),
+                    tr("University Groups"));
+  tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
   tabWidget->addTab(new MilitaryProfessionWidget(tabWidget),
                     tr("Специальности"));
   tabWidget->addTab(new UniversityFacultyWidget(tabWidget), tr("Факультеты"));

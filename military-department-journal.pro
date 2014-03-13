@@ -23,12 +23,14 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     database.cpp \
     documentgenerator.cpp \
-    csvoldformatconverter.cpp
+    csvoldformatconverter.cpp \
+    namemorpher.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
     documentgenerator.h \
-    csvoldformatconverter.h
+    csvoldformatconverter.h \
+    namemorpher.h
 
 HEADERS += \
     models/universitygroupmodel.h \

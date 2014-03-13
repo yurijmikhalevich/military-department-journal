@@ -9,15 +9,9 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QString>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QEventLoop>
 #include <QSqlRelationalDelegate>
 #include "qt4table-steroids/tablehelper.h"
 #include "models/studentmodel.h"
-
-QNetworkAccessManager *StudentWidget::networkManager =
-    new QNetworkAccessManager();
 
 StudentWidget::StudentWidget(QWidget *parent)
     : BaseWidget(parent) {
@@ -29,6 +23,7 @@ StudentWidget::StudentWidget(QWidget *parent)
           model, SLOT(queryChanged(QString)));
   view->setModel(model);
   mainLayout->addLayout(createControlsLayout());
+  nameMorpher = new NameMorpher(this);
 }
 
 StudentWidget::~StudentWidget() {
@@ -128,30 +123,12 @@ void StudentWidget::addStudent() {
 }
 
 void StudentWidget::morphName() {
-  QNetworkRequest request(
-        "http://morpher.ru/WebService.asmx/GetXml?s="
-        + QStringList({lastnameEdit->text(), firstnameEdit->text(),
-                       middlenameEdit->text()}).join(" "));
-  QNetworkReply *reply = networkManager->get(request);
-  QEventLoop *loop = new QEventLoop();
-  connect(reply, SIGNAL(finished()), loop, SLOT(quit()));
-  loop->exec();
-  QString response = QString(reply->readAll());
-  QStringList accusative =
-      response.split("<В>").at(1).split("</В>").at(0).split(" ");
-  QStringList datum =
-      response.split("<Д>").at(1).split("</Д>").at(0).split(" ");
-  lastnameDatumEdit->setText(datum.at(0));
-  firstnameDatumEdit->setText(datum.at(1));
-  middlenameDatumEdit->setText(datum.at(2));
-  lastnameAccusativeEdit->setText(accusative.at(0));
-  firstnameAccusativeEdit->setText(accusative.at(1));
-  middlenameAccusativeEdit->setText(accusative.at(2));
-//    if (response.contains("<В>")) {
-//        return response.split("<В>").at(1).split("</В>").at(0);
-//    } else {
-//        sleep(3);
-//        qDebug() << "error wetching Accuzative, retrying in 3 secs";
-//        return getAccuzative(studentName);
-//    }
+  NameMorpher::MorphedName morphedName = nameMorpher->getMorphedName(
+        lastnameEdit->text(), firstnameEdit->text(), middlenameEdit->text());
+  lastnameDatumEdit->setText(morphedName.lastnameDatum);
+  firstnameDatumEdit->setText(morphedName.firstnameDatum);
+  middlenameDatumEdit->setText(morphedName.middlenameDatum);
+  lastnameAccusativeEdit->setText(morphedName.lastnameAccusative);
+  firstnameAccusativeEdit->setText(morphedName.firstnameAccusative);
+  middlenameAccusativeEdit->setText(morphedName.middlenameAccusative);
 }

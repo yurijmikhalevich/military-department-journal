@@ -8,10 +8,10 @@
 #include <QDateEdit>
 #include <QCalendarWidget>
 #include <QPushButton>
-#include <QNetworkAccessManager>
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/spinboxdelegate.h"
 #include "qt4table-steroids/checkboxdelegate.h"
+#include "namemorpher.h"
 
 class StudentWidget : public BaseWidget {
   Q_OBJECT
@@ -20,7 +20,6 @@ public:
   ~StudentWidget();
 private:
   QLayout *createControlsLayout();
-  static QNetworkAccessManager *networkManager;
   QLineEdit *firstnameEdit;
   QLineEdit *middlenameEdit;
   QLineEdit *lastnameEdit;
@@ -39,6 +38,7 @@ private:
 //    QComboBox *expulsedFromEdit;
 //  QComboBox *troopEdit;
   QPushButton *addStudentButton;
+  NameMorpher *nameMorpher;
 private slots:
   void addStudent();
   void morphName();

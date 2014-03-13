@@ -18,8 +18,6 @@ private:
   QCheckBox *showDismissedCheckBox;
   QPushButton *addTeacherButton;
   QLineEdit *teacherName;
-signals:
-  void queryChanged(QString query);
 private slots:
   void teacherNameChanged(const QString name);
   void addTeacher();
