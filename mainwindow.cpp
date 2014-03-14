@@ -35,9 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
   tabWidget->hide();
   ui->centralWidget->layout()->addWidget(tabWidget);
   ui->emblem->hide();
-  qDebug() << CSVOldFormatConverter::convertDatabase(
-                "/Users/y/Downloads/stuff/vboxshare/war-database-csv",
-                "/Users/y/mdj-converted.mdj");
+//  qDebug() << CSVOldFormatConverter::convertDatabase(
+//                "/Users/y/Downloads/stuff/vboxshare/war-database-csv",
+//                "/Users/y/mdj-converted.mdj");
 //                "E:/war-database-csv",
 //                "C:/mdj-converted.mdj");
 //    DocumentGenerator::generateExamList("/home/39/stuff/vboxshare/vedomost.docx",
@@ -109,12 +109,12 @@ void MainWindow::on_action_Open_triggered() {
 void MainWindow::initControls() {
   ui->centralWidget->setEnabled(true);
   ui->emblem->hide();
+  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
 //  tabWidget->addTab(new MarkWidget(tabWidget), tr("Marks"));
 //  tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluations"));
 //  tabWidget->addTab(new SubjectDurationWidget(tabWidget),
 //                    tr("Subjects Duration"));
 //  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
   tabWidget->addTab(new UniversityGroupWidget(tabWidget),
                     tr("University Groups"));
   tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
