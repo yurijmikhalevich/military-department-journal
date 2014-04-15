@@ -11,5 +11,5 @@ before_install:
   - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
 script:
   - git submodule update --init --recursive
-  - qmake QMAKE_CXX="g++-4.8" QMAKE_CC="gcc-4.8" -qt=qt5 .
+  - qmake QMAKE_CXX="g++-4.8" QMAKE_CC="gcc-4.8" .
   - make
