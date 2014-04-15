@@ -14,3 +14,6 @@
 
 # Qt related files
 *.user
+*.user*
+
+.DS_Store

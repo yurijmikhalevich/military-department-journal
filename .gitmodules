@@ -1,0 +1,6 @@
+[submodule "qt4table-steroids"]
+	path = qt4table-steroids
+	url = https://github.com/39dotyt/qt4table-steroids.git
+[submodule "docx-replacer"]
+	path = docx-replacer
+	url = https://github.com/39dotyt/qt-docx-replacer.git
