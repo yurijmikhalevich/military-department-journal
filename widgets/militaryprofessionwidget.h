@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QCheckBox>
 
 class MilitaryProfessionWidget : public BaseWidget {
   Q_OBJECT
@@ -18,6 +19,7 @@ private:
   QLineEdit *codeEdit;
   QLineEdit *nameEdit;
   QPushButton *addNewButton;
+  QCheckBox *showArchivedCheckBox;
 private slots:
   void invalidCode(QString &input);
   void invalidName(QString &input);

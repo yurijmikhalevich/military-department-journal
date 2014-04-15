@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QString>
 #include <QSqlRelationalDelegate>
-#include "qt4table-steroids/tablehelper.h"
 #include "models/studentmodel.h"
 
 StudentWidget::StudentWidget(QWidget *parent)
@@ -39,9 +38,9 @@ QLayout *StudentWidget::createControlsLayout() {
   lastnameAccusativeEdit = new QLineEdit(this);
   firstnameAccusativeEdit = new QLineEdit(this);
   middlenameAccusativeEdit = new QLineEdit(this);
-  QLabel *lastname = new QLabel(tr("Lastname"));
-  QLabel *firstname = new QLabel(tr("Firstname"));
-  QLabel *middlename = new QLabel(tr("Middlename"));
+  QLabel *lastname = new QLabel(tr("Фамилия"));
+  QLabel *firstname = new QLabel(tr("Имя"));
+  QLabel *middlename = new QLabel(tr("Отчество"));
   QHBoxLayout *controlsLayout = new QHBoxLayout();
   QFormLayout *nameLayout = new QFormLayout();
   QHBoxLayout *headerLayout = new QHBoxLayout();
@@ -53,17 +52,17 @@ QLayout *StudentWidget::createControlsLayout() {
   nominativeLayout->addWidget(lastnameEdit);
   nominativeLayout->addWidget(firstnameEdit);
   nominativeLayout->addWidget(middlenameEdit);
-  nameLayout->addRow(tr("Nominative"), nominativeLayout);
+  nameLayout->addRow(tr("Именительный"), nominativeLayout);
   QHBoxLayout *datumLayout = new QHBoxLayout();
   datumLayout->addWidget(lastnameDatumEdit);
   datumLayout->addWidget(firstnameDatumEdit);
   datumLayout->addWidget(middlenameDatumEdit);
-  nameLayout->addRow(tr("Datum"), datumLayout);
+  nameLayout->addRow(tr("Дательный"), datumLayout);
   QHBoxLayout *accusativeLayout = new QHBoxLayout();
   accusativeLayout->addWidget(lastnameAccusativeEdit);
   accusativeLayout->addWidget(firstnameAccusativeEdit);
   accusativeLayout->addWidget(middlenameAccusativeEdit);
-  nameLayout->addRow(tr("Accusative"), accusativeLayout);
+  nameLayout->addRow(tr("Винительный"), accusativeLayout);
   controlsLayout->addItem(nameLayout);
   QFormLayout *secondRowLayout = new QFormLayout();
   decreeEnrollmentNumberEdit = new QLineEdit(this);
@@ -76,17 +75,16 @@ QLayout *StudentWidget::createControlsLayout() {
   connect(dobButton, SIGNAL(clicked()), calendar, SLOT(show()));
   dobLayout->addWidget(dobEdit);
   dobLayout->addWidget(dobButton);
-  secondRowLayout->addRow(tr("Enrollment number"), decreeEnrollmentNumberEdit);
-  secondRowLayout->addRow(tr("Date of birth"), dobLayout);
+  secondRowLayout->addRow(tr("Приказ о зачислении"),
+                          decreeEnrollmentNumberEdit);
+  secondRowLayout->addRow(tr("Дата рождения"), dobLayout);
   controlsLayout->addLayout(secondRowLayout);
   QFormLayout *thirdRowLayout = new QFormLayout();
   universityGroupEdit =
-      TableHelper::createRelationalEditor("university_group", "name");
-//  troopEdit = TableHelper::createRelationalEditor("troop", "name");
-  thirdRowLayout->addRow(tr("University group"), universityGroupEdit);
-//  thirdRowLayout->addRow(tr("Troop"), troopEdit);
+      new TableSteroids::RelationalComboBox("university_group", "name");
+  thirdRowLayout->addRow(tr("Группа"), universityGroupEdit);
   controlsLayout->addLayout(thirdRowLayout);
-  addStudentButton = new QPushButton(tr("Add student"));
+  addStudentButton = new QPushButton(tr("Добавить студента"));
   connect(addStudentButton, SIGNAL(clicked()), this, SLOT(addStudent()));
   controlsLayout->addWidget(addStudentButton);
   connect(middlenameEdit, SIGNAL(editingFinished()), this, SLOT(morphName()));
@@ -111,8 +109,7 @@ void StudentWidget::addStudent() {
   query.addBindValue(firstnameAccusativeEdit->text());
   query.addBindValue(middlenameAccusativeEdit->text());
   query.addBindValue(dobEdit->date());
-  query.addBindValue(
-        universityGroupEdit->itemData(universityGroupEdit->currentIndex()));
+  query.addBindValue(universityGroupEdit->currentId());
   query.addBindValue(decreeEnrollmentNumberEdit->text());
 //    query.addBindValue(troopEdit->itemData(troopEdit->currentIndex()));
   if (!query.exec()) {

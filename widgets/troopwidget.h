@@ -8,6 +8,10 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QPushButton>
+#include <QCheckBox>
+#include <QDateEdit>
+#include "qt4table-steroids/relationalcombobox.h"
+#include "troopnamedelegate.h"
 
 class TroopWidget : public BaseWidget {
   Q_OBJECT
@@ -16,11 +20,12 @@ public:
 private:
   QVBoxLayout *mainLayout;
   QHBoxLayout *controlsLayout;
-  QLineEdit *nameEdit;
-  QSpinBox *graduatedInEdit;
-  QComboBox *curatorEdit;
-  QComboBox *professionEdit;
+  TroopNameEditor *nameEdit;
+  QDateEdit *enteredInEdit;
+  TableSteroids::RelationalComboBox *curatorEdit;
+  TableSteroids::RelationalComboBox *professionEdit;
   QPushButton *addTroopButton;
+  QCheckBox *showGraduatedCheckBox;
 private slots:
   void addTroop();
 };

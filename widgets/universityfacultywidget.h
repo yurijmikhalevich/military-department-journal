@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include <QSpinBox>
+#include <QCheckBox>
 #include <QPushButton>
 #include <QSortFilterProxyModel>
 
@@ -18,6 +18,7 @@ private:
   QHBoxLayout *controlsLayout;
   QLineEdit *newFacultyName;
   QPushButton *addNewButton;
+  QCheckBox *showArchivedCheckBox;
 private slots:
   void invalidInputReceived(QString &input);
   void newFacultyNameTextChanged(QString text);

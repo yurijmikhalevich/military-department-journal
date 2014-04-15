@@ -5,14 +5,14 @@
 #include <QHash>
 #include "qt4table-steroids/steroidsmodel.h"
 
-class TeacherModel : public SteroidsModel<QSqlTableModel>
-{
-    Q_OBJECT
+class TeacherModel : public SteroidsModel<QSqlTableModel> {
+  Q_OBJECT
 public:
-    explicit TeacherModel(QObject *parent = 0);
+  explicit TeacherModel(QObject *parent = 0);
+  QVariant data(const QModelIndex &idx, int role) const;
 public slots:
-    void showDismissed(bool show);
-    void queryChanged(QString query);
+  void showDismissed(bool show);
+  void queryChanged(QString query);
 };
 
 #endif // TEACHERMODEL_H

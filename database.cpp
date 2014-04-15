@@ -17,9 +17,7 @@ bool Database::init(const QString fileName, const bool test) {
   if (file.exists()) {
     file.remove();
   }
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName(fileName);
-  if (!db.open()) {
+  if (!open(fileName)) {
     return false;
   }
   QString initScript =
@@ -50,7 +48,7 @@ bool Database::init(const QString fileName, const bool test) {
       // pattern-based name, like "ПИЭ-<N:2>1/<N:3>1" or "ПИ-<N:2>1"
       // we will increase pattern placeholder every next year after the year
       // of entrance until the year of graduation
-      "  entered_at_military_department_date DATE,"
+      "  entered_at_military_department_date DATE NOT NULL,"
       "  graduated_from_military_department_date DATE,"
       "  curator_id INTEGER REFERENCES teacher (id),"
       "  military_profession_id INTEGER REFERENCES military_profession (id)"
@@ -61,10 +59,11 @@ bool Database::init(const QString fileName, const bool test) {
       "CREATE TABLE university_group ("
       "  id INTEGER PRIMARY KEY,"
       "  name TEXT NOT NULL UNIQUE,"
-      "  graduated_from_university_date DATE,"
+      "  graduated_from_university_year INT,"
       "  faculty_id INTEGER REFERENCES university_faculty (id) NOT NULL,"
       "  troop_id INTEGER REFERENCES troop (id) NOT NULL"
       ");"
+      "CREATE INDEX university_group_troop_id ON university_group (troop_id);"
       // every univeristy group is linked with troop. If troop contains multiple
       // groups, when we generate exam lists for troop, we shoul generate
       // separate list for every group
@@ -117,11 +116,11 @@ bool Database::init(const QString fileName, const bool test) {
       ");"
       "CREATE TABLE evaluation ("
       "  id INTEGER PRIMARY KEY,"
+      "  date DATE NOT NULL,"
       "  subject_id INTEGER REFERENCES subject (id) NOT NULL,"
-      "  control_type_id INTEGER REFERENCES control_type (id) NOT NULL,"
-      "  teacher_id INTEGER REFERENCES teacher (id),"
       "  troop_id INTEGER REFERENCES troop (id) NOT NULL,"
-      "  date DATE NOT NULL"
+      "  control_type_id INTEGER REFERENCES control_type (id) NOT NULL,"
+      "  teacher_id INTEGER REFERENCES teacher (id)"
       ");"
       "CREATE UNIQUE INDEX evaluation_unique"
       " ON evaluation (subject_id, control_type_id, troop_id, date);"
@@ -210,6 +209,15 @@ bool Database::open(const QString fileName) {
   db.setDatabaseName(fileName);
   if (!db.open()) {
     return false;
+  }
+  QSqlQuery query;
+  for (auto queryString : {"PRAGMA page_size = 4096",
+       "PRAGMA cache_size = -16384", "PRAGMA temp_store = MEMORY",
+       "PRAGMA journal_mode = OFF", "PRAGMA locking_mode = EXCLUSIVE",
+       "PRAGMA synchronous = OFF"}) {
+    if (!query.exec(queryString)) {
+      return false;
+    }
   }
   return true;
 }

@@ -287,6 +287,7 @@ static bool fillSubject(QStringList splittedStudent, int studentId, int groupId,
 static bool fillMarks(QStringList splittedStudent, int studentId, int groupId,
                       int offset) {
 //  qDebug() << "filling student" << studentId;
+//  qDebug() << groupId;
   bool ok = true;
   ok = fillSubject(splittedStudent, studentId, groupId, offset + 14,
                    "Тактическая подготовка");
@@ -425,6 +426,7 @@ static bool fillMark(int evaluationId, int studentId, int value, int teacherId,
 
 static int getEvaluationId(QString subject, QString controlType,
                            QString teacher, int groupId, QString date) {
+//  qDebug() << groupId;
   QSqlQuery query;
   query.prepare("SELECT id FROM control_type WHERE type = ?");
   query.addBindValue(controlType);
@@ -438,7 +440,7 @@ static int getEvaluationId(QString subject, QString controlType,
   if (!execAndNextQuery(query)) {
     return 0;
   }
-  int troopId = query.record().value("id").toInt();
+  QVariant troopId = query.record().value("troop_id");
   query.prepare("SELECT id FROM subject WHERE name = ?");
   query.addBindValue(subject);
   if (!execAndNextQuery(query)) {
@@ -505,11 +507,30 @@ static int getEvaluationId(QString subject, QString controlType,
 
 bool CSVOldFormatConverter::fillSubjects(QString) {
   QSqlQuery query;
-  QString queryString = "INSERT INTO subject (name) VALUES ('" + VAT +
-      "'), ('" + UPVMV + "'), ('" + PDD + "'), ('" + TSP + "'), ('" + TP +
-      "'), ('" + UAT + "'), ('" + EAT + "'), ('" + OGP + "')";
-  if (!query.exec(queryString)) {
+  if (!query.exec("SELECT id FROM military_profession")) {
     return false;
+  }
+  QVariantList militaryProfessionIds;
+  while (query.next()) {
+    militaryProfessionIds.append(query.record().value("id"));
+  }
+  query.prepare("INSERT INTO subject_duration (subject_id,"
+                " military_profession_id, duration) VALUES (?, ?, 0)");
+  QSqlQuery insertSubjectQuery;
+  insertSubjectQuery.prepare("INSERT INTO subject (name) VALUES (?)");
+  for (QString subjectName : {VAT, UPVMV, PDD, TSP, TP, UAT, EAT, OGP}) {
+    insertSubjectQuery.addBindValue(subjectName);
+    if (!insertSubjectQuery.exec()) {
+      return false;
+    }
+    QVariant lastInsertId = insertSubjectQuery.lastInsertId();
+    for (QVariant militaryProfessionId : militaryProfessionIds) {
+      query.addBindValue(lastInsertId);
+      query.addBindValue(militaryProfessionId);
+      if (!query.exec()) {
+        return false;
+      }
+    }
   }
   return true;
 }
@@ -615,13 +636,11 @@ int CSVOldFormatConverter::getGroupId(
     throw;
   }
   queryString = "INSERT INTO university_group (name,"
-      " graduated_from_university_date, faculty_id, troop_id)"
+      " graduated_from_university_year, faculty_id, troop_id)"
       " VALUES (?, ?, ?, ?)";
   query.prepare(queryString);
   query.addBindValue(groupName);
-  graduatedFromUniversityDate.setDate(
-        graduatedFromUniverisityInYear.toInt(), 7, 1);
-  query.addBindValue(graduatedFromUniversityDate);
+  query.addBindValue(graduatedFromUniverisityInYear.toInt());
   query.addBindValue(facultyId);
   query.addBindValue(troopId);
   if (!query.exec()) {

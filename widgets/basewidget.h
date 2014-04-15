@@ -28,7 +28,7 @@ protected:
    * @return true if insert performed successfully, otherwise returns false and
    * emits error signal
    */
-  bool insertRecord(const QVariantMap record);
+  int insertRecord(const QVariantMap record);
   /**
    * @brief model Pointer to widgets table model, which should be an instance of
    * QSqlTableModel
@@ -51,12 +51,16 @@ signals:
    * @param query User inputted query
    */
   void queryChanged(QString query);
+  void recordInserted(int id, QVariantMap record);
+protected:
+  bool execQuery(QSqlQuery &query, QString errorMessage = "");
+  bool execAndNextQuery(QSqlQuery &query, QString errorMessage = "");
 private:
   /**
    * @brief query Common (for all tab widgets) QSqlQuery object. It is OK,
    * because application is single thread
    */
-    static QSqlQuery *query;
+  static QSqlQuery *query;
 };
 
 #endif // BASEWIDGET_H

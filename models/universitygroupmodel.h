@@ -12,6 +12,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
   int columnCount(const QModelIndex &) const;
 public slots:
+  void showGraduated(bool show);
   void queryChanged(QString query);
 };
 

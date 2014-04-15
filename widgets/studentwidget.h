@@ -11,6 +11,7 @@
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/spinboxdelegate.h"
 #include "qt4table-steroids/checkboxdelegate.h"
+#include "qt4table-steroids/relationalcombobox.h"
 #include "namemorpher.h"
 
 class StudentWidget : public BaseWidget {
@@ -31,7 +32,7 @@ private:
   QLineEdit *lastnameAccusativeEdit;
   QDateEdit *dobEdit;
 //    QCalendarWidget *dobCalendar;
-  QComboBox *universityGroupEdit;
+  TableSteroids::RelationalComboBox *universityGroupEdit;
   QLineEdit *decreeEnrollmentNumberEdit;
 //    QLineEdit *decreeExpulsionNumberEdit;
 //    QComboBox *expulsionReasonEdit;

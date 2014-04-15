@@ -7,61 +7,66 @@
 #include <QSqlError>
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
 #include "qt4table-steroids/lineeditdelegate.h"
-#include "qt4table-steroids/tablehelper.h"
-#include "qt4table-steroids/spinboxdelegate.h"
+#include "qt4table-steroids/datedelegate.h"
+#include "qt4table-steroids/steroidsrelationaldelegate.h"
 #include "models/troopmodel.h"
 
 TroopWidget::TroopWidget(QWidget *parent)
-    : BaseWidget(parent) {
-  mainLayout = new QVBoxLayout(this);
+    : BaseWidget(parent),
+      mainLayout(new QVBoxLayout(this)),
+      controlsLayout(new QHBoxLayout()),
+      addTroopButton(new QPushButton(tr("Добавить взвод"), this)),
+      showGraduatedCheckBox(
+        new QCheckBox(tr("Показать выпустившиеся взвода"), this)),
+      professionEdit(
+        new TableSteroids::RelationalComboBox("military_profession", "name")),
+      curatorEdit(new TableSteroids::RelationalComboBox("teacher", "name")) {
+  mainLayout->addWidget(showGraduatedCheckBox);
   mainLayout->addWidget(view);
-  model = new TroopModel(view);
-  view->setModel(model);
-  view->setItemDelegate(new QSqlRelationalDelegate(view));
-  SQLUniqueSteroidsValidator *nameValidator =
-      new SQLUniqueSteroidsValidator("troop", "name");
-  LineEditDelegate *nameDelegate = new LineEditDelegate(nameValidator, view);
+  model = new TroopModel(this);
+  connect(this, SIGNAL(queryChanged(QString)),
+          model, SLOT(queryChanged(QString)));
+  connect(showGraduatedCheckBox, SIGNAL(clicked(bool)),
+          model, SLOT(showGraduated(bool)));
+  TroopSortModel *sortModel = new TroopSortModel(this);
+  sortModel->setSourceModel(model);
+  view->setModel(sortModel);
+  view->setItemDelegateForColumn(4, new SteroidsRelationalDelegate(view));
+  view->setItemDelegateForColumn(5, new SteroidsRelationalDelegate(view));
+  TroopNameDelegate *nameDelegate = new TroopNameDelegate(view);
   view->setItemDelegateForColumn(1, nameDelegate);
-  int year = QDate::currentDate().year();
-  SpinBoxDelegate *graduatedInDelegate =
-      new SpinBoxDelegate(1900, year + 12, year + 2, view);
+  QDate date = QDate::currentDate();
+  date.setDate(date.year() + 2, 9, 17);
+  DateDelegate *graduatedInDelegate = new DateDelegate(date, view);
   view->setItemDelegateForColumn(3, graduatedInDelegate);
-  controlsLayout = new QHBoxLayout();
-  nameEdit = static_cast<QLineEdit *>(nameDelegate->createEditor(this));
+  date.setDate(date.year() - 2, 5, 1);
+  DateDelegate *enteredInDelegate = new DateDelegate(date, view);
+  view->setItemDelegateForColumn(2, enteredInDelegate);
+  nameEdit = static_cast<TroopNameEditor *>(nameDelegate->createEditor(this));
   controlsLayout->addWidget(nameEdit);
-  graduatedInEdit =
-      static_cast<QSpinBox *>(graduatedInDelegate->createEditor(this));
-  controlsLayout->addWidget(graduatedInEdit);
-  curatorEdit =
-      static_cast<QComboBox *>(TableHelper::createRelationalEditor(
-                                 "teacher", "name"));
+  enteredInEdit =
+      static_cast<QDateEdit *>(enteredInDelegate->createEditor(this));
+  controlsLayout->addWidget(enteredInEdit);
   controlsLayout->addWidget(curatorEdit);
-  professionEdit =
-      static_cast<QComboBox *>(TableHelper::createRelationalEditor(
-                                 "military_profession", "name"));
   controlsLayout->addWidget(professionEdit);
-  addTroopButton = new QPushButton(tr("Add troop"), this);
   controlsLayout->addWidget(addTroopButton);
   connect(addTroopButton, SIGNAL(clicked()), this, SLOT(addTroop()));
   mainLayout->addLayout(controlsLayout);
 }
 
 void TroopWidget::addTroop() {
-  if (nameEdit->text().isEmpty()) {
+  QString name = nameEdit->troopName();
+  if (name.isEmpty()) {
     return;
   }
-  QSqlQuery query;
-  query.prepare("INSERT INTO troop (name,"
-                " graduated_from_military_department_date, curator_id,"
-                " military_profession_id)"
-                " VALUES (?, ?, ?, ?)");
-  query.addBindValue(nameEdit->text());
-  query.addBindValue(QString("%1-01-01").arg(graduatedInEdit->value()));
-  query.addBindValue(curatorEdit->itemData(curatorEdit->currentIndex()));
-  query.addBindValue(professionEdit->itemData(professionEdit->currentIndex()));
-  if (!query.exec()) {
-    throw query.lastError(); // TODO: replace with signal emitting
+  if (insertRecord({{"name", name}, {"entered_at_military_department_date",
+                   enteredInEdit->date()},
+  {"curator_id", curatorEdit->itemData(curatorEdit->currentIndex())},
+  {"military_profession_id",
+                   professionEdit->itemData(professionEdit->currentIndex())}})
+      != -1)
+  {
+    nameEdit->setTroopName("-<N:2>1");
+    model->select();
   }
-  nameEdit->clear();
-  model->select();
 }

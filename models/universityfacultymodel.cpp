@@ -1,13 +1,25 @@
 #include "universityfacultymodel.h"
 #include <QStringList>
 #include <QDebug>
+#include <QSqlRecord>
 
 UniversityFacultyModel::UniversityFacultyModel(QObject *parent)
     : SteroidsModel<QSqlTableModel>(parent) {
   this->setTable("university_faculty");
-  this->setHeaderData(1, Qt::Horizontal, tr("Archived"));
-  this->setHeaderData(2, Qt::Horizontal, tr("Name"));
+  this->setHeaderData(1, Qt::Horizontal, tr("Статус"));
+  this->setHeaderData(2, Qt::Horizontal, tr("Название"));
   this->showArchived(false);
+}
+
+QVariant UniversityFacultyModel::data(const QModelIndex &idx, int role) const {
+  if (idx.column() == 1 && role == Qt::DisplayRole) {
+    if (idx.data(Qt::EditRole).toBool()) {
+      return tr("В архиве");
+    } else {
+      return tr("Действителен");
+    }
+  }
+  return SteroidsModel<QSqlTableModel>::data(idx, role);
 }
 
 void UniversityFacultyModel::showArchived(bool show) {
@@ -23,15 +35,11 @@ void UniversityFacultyModel::queryChanged(QString query) {
   if (query.isEmpty()) {
     filters.remove("query");
   } else {
-    QStringList splittedQuery = query.simplified().split(" ");
-    QStringList filter;
-    for (QString word : splittedQuery) {
-      filter.append(
-            QString("(name LIKE '% %1%'"
-                    " OR name LIKE '%1%')").arg(
-              word.at(0).toUpper() + word.mid(1)));
-    }
-    filters.insert("query", filter.join(" AND "));
+    query = query.simplified();
+    filters.insert("query",
+                   QString("(name LIKE '%%1%' OR name LIKE '%%2%')").arg(
+                     query.at(0).toUpper() + query.mid(1),
+                     query));
   }
   compileFilters();
 }

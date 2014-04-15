@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Military Department Journal</string>
+   <string>Журнал военной кафедры «КубГАУ»</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
@@ -24,7 +24,7 @@
     <item>
      <widget class="QLineEdit" name="globalSearch">
       <property name="placeholderText">
-       <string>Search here</string>
+       <string>Поиск…</string>
       </property>
      </widget>
     </item>
@@ -50,15 +50,16 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">
-     <string>&amp;File</string>
+     <string>&amp;Файл</string>
     </property>
     <addaction name="action_New"/>
     <addaction name="action_Open"/>
+    <addaction name="action_Import"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -67,7 +68,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_New">
    <property name="text">
-    <string>&amp;New</string>
+    <string>&amp;Создать</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -75,7 +76,7 @@
   </action>
   <action name="action_Open">
    <property name="text">
-    <string>&amp;Open</string>
+    <string>&amp;Открыть</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -83,10 +84,18 @@
   </action>
   <action name="action_Quit">
    <property name="text">
-    <string>&amp;Quit</string>
+    <string>&amp;Выйти</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Import">
+   <property name="text">
+    <string>&amp;Импортировать…</string>
+   </property>
+   <property name="toolTip">
+    <string>Импортировать…</string>
    </property>
   </action>
  </widget>

@@ -24,13 +24,17 @@ SOURCES += main.cpp \
     database.cpp \
     documentgenerator.cpp \
     csvoldformatconverter.cpp \
-    namemorpher.cpp
+    namemorpher.cpp \
+    widgets/troopnamedelegate.cpp \
+    widgets/trooprelationaldelegate.cpp
 
 HEADERS  += mainwindow.h \
     database.h \
     documentgenerator.h \
     csvoldformatconverter.h \
-    namemorpher.h
+    namemorpher.h \
+    widgets/troopnamedelegate.h \
+    widgets/trooprelationaldelegate.h
 
 HEADERS += \
     models/universitygroupmodel.h \
@@ -40,9 +44,7 @@ HEADERS += \
     models/studentmodel.h \
     models/subjectmodel.h \
     models/evaluationmodel.h \
-    models/subjectdurationmodel.h \
-    models/universityfacultymodel.h \
-    models/markmodel.h
+    models/universityfacultymodel.h
 
 SOURCES += \
     models/universitygroupmodel.cpp \
@@ -52,9 +54,7 @@ SOURCES += \
     models/studentmodel.cpp \
     models/subjectmodel.cpp \
     models/evaluationmodel.cpp \
-    models/universityfacultymodel.cpp \
-    models/subjectdurationmodel.cpp \
-    models/markmodel.cpp
+    models/universityfacultymodel.cpp
 
 HEADERS += \
     widgets/universityfacultywidget.h \
@@ -65,9 +65,7 @@ HEADERS += \
     widgets/militaryprofessionwidget.h \
     widgets/studentwidget.h \
     widgets/subjectwidget.h \
-    widgets/evaluationwidget.h \
-    widgets/subjectdurationwidget.h \
-    widgets/markwidget.h
+    widgets/evaluationwidget.h
 
 SOURCES += \
     widgets/universityfacultywidget.cpp \
@@ -78,9 +76,7 @@ SOURCES += \
     widgets/militaryprofessionwidget.cpp \
     widgets/studentwidget.cpp \
     widgets/subjectwidget.cpp \
-    widgets/evaluationwidget.cpp \
-    widgets/subjectdurationwidget.cpp \
-    widgets/markwidget.cpp
+    widgets/evaluationwidget.cpp
 
 FORMS    += mainwindow.ui
 

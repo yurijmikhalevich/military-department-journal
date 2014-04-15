@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QTabWidget>
 #include <QSettings>
+#include <QDebug>
 
 #include "database.h"
 #include "widgets/basewidget.h"
@@ -17,13 +18,10 @@
 #include "widgets/subjectwidget.h"
 #include "widgets/evaluationwidget.h"
 #include "widgets/universityfacultywidget.h"
-#include "widgets/subjectdurationwidget.h"
-#include "widgets/markwidget.h"
 
 //#include <QDate>
 //#include "documentgenerator.h"
 #include "csvoldformatconverter.h"
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -34,12 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
           this, SLOT(onCurrentTabChanged(int)));
   tabWidget->hide();
   ui->centralWidget->layout()->addWidget(tabWidget);
-  ui->emblem->hide();
-//  qDebug() << CSVOldFormatConverter::convertDatabase(
-//                "/Users/y/Downloads/stuff/vboxshare/war-database-csv",
-//                "/Users/y/mdj-converted.mdj");
-//                "E:/war-database-csv",
-//                "C:/mdj-converted.mdj");
 //    DocumentGenerator::generateExamList("/home/39/stuff/vboxshare/vedomost.docx",
 //                                        "/home/39/stuff/vboxshare/vedomost_patched.docx", "II", "2012/2013",
 //                                        "Механизации", "МХ-41", "4", "560100",
@@ -80,13 +72,13 @@ void MainWindow::onCurrentTabChanged(int newTabIndex) {
 
 void MainWindow::on_action_New_triggered() {
   QString fileName = QFileDialog::getSaveFileName(
-        this, tr("Выберите файл"), QDir::currentPath(),
-        tr("Journal (*.mdj)"));
+        this, tr("Введите имя файла журнала"), QDir::currentPath(),
+        tr("Журнал (*.mdj)"));
   if (fileName.isEmpty()) {
     return;
   }
   if (!Database::init(fileName, true)) {
-    displayError(tr("Cannot init database"));
+    displayError(tr("Невозможно инициализировать журнал"));
   } else {
     initControls();
   }
@@ -94,37 +86,62 @@ void MainWindow::on_action_New_triggered() {
 
 void MainWindow::on_action_Open_triggered() {
   QString fileName = QFileDialog::getOpenFileName(
-        this, tr("Enter filename"), QDir::currentPath(),
-        tr("Journal (*.mdj)"));
+        this, tr("Выберите файл журнала"), QDir::currentPath(),
+        tr("Журнал (*.mdj)"));
   if (fileName.isEmpty()) {
     return;
   }
   if (!Database::open(fileName)) {
-    displayError(tr("Cannot open database"));
+    displayError(tr("Невозможно открыть журнал"));
   } else {
     initControls();
   }
 }
 
 void MainWindow::initControls() {
+  while (tabWidget->count()) {
+    delete tabWidget->widget(0);
+    tabWidget->removeTab(0);
+  }
+  TroopWidget *troopWidget = new TroopWidget(tabWidget);
+  // it is needed to created troopWidget before UniversityGroupWidget
   ui->centralWidget->setEnabled(true);
   ui->emblem->hide();
-  tabWidget->addTab(new StudentWidget(tabWidget), tr("Students"));
-//  tabWidget->addTab(new MarkWidget(tabWidget), tr("Marks"));
-//  tabWidget->addTab(new EvaluationWidget(tabWidget), tr("Evaluations"));
-//  tabWidget->addTab(new SubjectDurationWidget(tabWidget),
-//                    tr("Subjects Duration"));
-//  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Subjects"));
-  tabWidget->addTab(new UniversityGroupWidget(tabWidget),
-                    tr("University Groups"));
-  tabWidget->addTab(new TroopWidget(tabWidget), tr("Troops"));
+  tabWidget->tabBar()->setExpanding(false);
+  tabWidget->tabBar()->setUsesScrollButtons(true);
+  tabWidget->addTab(new StudentWidget(tabWidget), tr("Студенты"));
+  tabWidget->addTab(new EvaluationWidget(tabWidget),
+                    tr("Проверочные испытания"));
+  tabWidget->addTab(new SubjectWidget(tabWidget), tr("Предметы"));
+  tabWidget->addTab(new UniversityGroupWidget(tabWidget), tr("Группы"));
+  tabWidget->addTab(troopWidget, tr("Взвода"));
+  tabWidget->addTab(new TeacherWidget(tabWidget), tr("Преподаватели"));
+  tabWidget->addTab(new UniversityFacultyWidget(tabWidget), tr("Факультеты"));
   tabWidget->addTab(new MilitaryProfessionWidget(tabWidget),
                     tr("Специальности"));
-  tabWidget->addTab(new UniversityFacultyWidget(tabWidget), tr("Факультеты"));
-  tabWidget->addTab(new TeacherWidget(tabWidget), tr("Преподаватели"));
   for (int i = 0; i < tabWidget->count(); ++i) {
     connect(static_cast<BaseWidget *>(tabWidget->widget(i)),
             SIGNAL(error(QString)), this, SLOT(displayError(QString)));
   }
   tabWidget->show();
+}
+
+void MainWindow::on_action_Import_triggered() {
+  QString dirPath = QFileDialog::getExistingDirectory(
+        this, tr("Выберите директорию, содержащую журнал в старом формате"),
+        QDir::currentPath());
+  if (dirPath.isEmpty()) {
+    return;
+  }
+  QString fileName = QFileDialog::getSaveFileName(
+        this, tr("Введите имя файла журнала"), QDir::currentPath(),
+        tr("Журнал (*.mdj)"));
+  if (fileName.isEmpty()) {
+    return;
+  }
+  if (!CSVOldFormatConverter::convertDatabase(dirPath, fileName)) {
+    displayError(tr("Произошла ошибка при импорте журнала"));
+  } else {
+    initControls();
+  }
 }

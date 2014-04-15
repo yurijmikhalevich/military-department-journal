@@ -8,7 +8,9 @@ class MilitaryProfessionModel : public SteroidsModel<QSqlTableModel> {
   Q_OBJECT
 public:
   explicit MilitaryProfessionModel(QObject *parent = 0);
+  QVariant data(const QModelIndex &idx, int role) const;
 public slots:
+  void showArchived(bool show);
   void queryChanged(QString query);
 };
 

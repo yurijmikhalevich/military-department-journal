@@ -8,6 +8,9 @@ class SubjectModel : public SteroidsModel<QSqlTableModel> {
   Q_OBJECT
 public:
   explicit SubjectModel(QObject *parent = 0);
+  QVariant data(const QModelIndex &idx, int role) const;
+public slots:
+  void showArchived(bool show);
 };
 
 #endif // SUBJECTMODEL_H

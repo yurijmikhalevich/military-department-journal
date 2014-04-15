@@ -21,6 +21,8 @@ private slots:
   void on_action_New_triggered();
   void on_action_Open_triggered();
 
+  void on_action_Import_triggered();
+
 private:
   Ui::MainWindow *ui;
   QTabWidget *tabWidget;
