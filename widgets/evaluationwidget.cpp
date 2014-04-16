@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QSqlRelationalDelegate>
 #include <QLabel>
+#include <QFileDialog>
 #include "qt4table-steroids/datedelegate.h"
 #include "models/evaluationmodel.h"
 #include "documentgenerator.h"
@@ -40,7 +41,7 @@ EvaluationWidget::EvaluationWidget(QWidget *parent)
   teacherEdit->setMinimumWidth(0);
   DateDelegate *dateDelegate = new DateDelegate(QDate::currentDate(), this);
   dateEdit = static_cast<QDateEdit *>(dateDelegate->createEditor(this));
-  view->setItemDelegateForColumn(5, dateDelegate);
+  view->setItemDelegateForColumn(1, dateDelegate);
   QHBoxLayout *layoutOne = new QHBoxLayout();
   layoutOne->addWidget(subjectEdit);
   layoutOne->addWidget(controlTypeEdit);
@@ -48,7 +49,7 @@ EvaluationWidget::EvaluationWidget(QWidget *parent)
   TroopRelationalDelegate *troopDelegate = new TroopRelationalDelegate(this);
   troopEdit = static_cast<TableSteroids::RelationalComboBox *>(
         troopDelegate->createEditor(this));
-  view->setItemDelegateForColumn(4, troopDelegate);
+  view->setItemDelegateForColumn(3, troopDelegate);
   layoutTwo->addWidget(teacherEdit);
   layoutTwo->addWidget(troopEdit);
   layoutTwo->addWidget(dateEdit);
@@ -58,7 +59,7 @@ EvaluationWidget::EvaluationWidget(QWidget *parent)
   controlsLayout->addLayout(layoutOne);
   controlsLayout->addLayout(layoutTwo);
   controlsLayout->addLayout(layoutThree);
-  generateEvaluationListButton->setDisabled(true);
+//  generateEvaluationListButton->setDisabled(true);
   connect(addEvaluationButton, SIGNAL(clicked()), this, SLOT(addEvaluation()));
   connect(generateEvaluationListButton, SIGNAL(clicked()),
           this, SLOT(generateEvaluationList()));
@@ -135,34 +136,100 @@ void EvaluationWidget::addEvaluation() {
 }
 
 void EvaluationWidget::generateEvaluationList() {
-//  QSqlQuery *query = new QSqlQuery();
-//  query->prepare("SELECT f.name FROM faculty AS f, university_group AS u"
-//                 " WHERE u.faculty_id = f.id AND u.id = ?");
-//  query->addBindValue(troopEdit->itemData(troopEdit->currentIndex()));
-//  if (!query->exec() || !query->next()) {
-//    emit error(query->lastError().text());
-//    return;
-//  }
-//  QString faculty = query->record().value("name").toString();
-//  query->prepare("SELECT name FROM student WHERE university_group_id = ?");
-//  QVariant universityGroupId = troopEdit->itemData(troopEdit->currentIndex());
-//  query->addBindValue(universityGroupId);
-//  if (!query->exec()) {
-//    emit error(query->lastError().text());
-//    return;
-//  }
-//  QStringList students;
-//  while (query->next()) {
-//    students.append(query->record().value("name").toString());
-//  }
-//  DocumentGenerator::generateExamList(
-//        QApplication::applicationFilePath() + QDir::separator() +
-//        "vedomost.docx",
-//        QApplication::applicationFilePath() + QDir::separator() + "vedomost_" +
-//        troopEdit->currentText() + "_" + subjectEdit->currentText() + ".docx",
-//        "I", "2013/2014", faculty, troopEdit->currentText(), "4", "261000",
-//        subjectEdit->currentText(), teacherEdit->currentText(),
-  //        dateEdit->date(), students);
+  //TODO: do not generate lists for dates after group expulsion date
+  //TODO: fix group name, if the exam date is another
+  QString directoryToSaveLists = QFileDialog::getExistingDirectory(
+        this, tr("Укажите директорию для сохранения ведомостей"),
+        QDir::homePath());
+  if (directoryToSaveLists.isEmpty()) {
+    return;
+  }
+  QSqlQuery query;
+  query.prepare(
+        "SELECT uf.name AS faculty_name, ug.id AS group_id,"
+        " ug.name AS group_name"
+        " FROM university_faculty AS uf, university_group AS ug"
+        " WHERE ug.faculty_id = uf.id AND ug.troop_id = ?");
+  int troopId = troopEdit->currentId();
+  query.addBindValue(troopId);
+  if (!execQuery(query)) {
+    return;
+  }
+  QStringList facultyNames;
+  QVariantList groupIds;
+  QStringList groupNames;
+  while (query.next()) {
+    facultyNames.append(query.record().value("faculty_name").toString());
+    groupIds.append(query.record().value("group_id"));
+    groupNames.append(query.record().value("group_name").toString());
+  }
+  if (groupIds.isEmpty()) {
+    emit error(tr("Во взводу нет ни одной группы"));
+    return;
+  }
+  query.prepare("SELECT mp.code AS code FROM military_profession AS mp,"
+                " troop AS t"
+                " WHERE mp.id = t.military_profession_id AND t.id = ?");
+  query.addBindValue(troopId);
+  if (!execAndNextQuery(query)) {
+    return;
+  }
+  QString militaryProfession = query.record().value("code").toString();
+  QList<QStringList> students;
+  query.prepare("SELECT lastname, firstname, middlename FROM student"
+                " WHERE university_group_id = ?");
+  for (QVariant groupId : groupIds) {
+    query.addBindValue(groupId);
+    if (!execQuery(query)) {
+      return;
+    }
+    QStringList studentsList;
+    while (query.next()) {
+      QString student = query.record().value("lastname").toString() +
+          " " + QString(query.record().value("firstname").toString().at(0)) +
+          ".";
+      QString middlename = query.record().value("middlename").toString();
+      if (!middlename.isEmpty()) {
+        student += QString(middlename.at(0)) + ".";
+      }
+      studentsList.append(student);
+    }
+    students.append(studentsList);
+  }
+  QDate date = dateEdit->date();
+  QString semester;
+  QString year;
+  if (date.month() > 2) {
+    semester = "II";
+    year = QString::number(date.year() - 1) + "/" +
+        QString::number(date.year());
+  } else {
+    semester = "I";
+    year = QString::number(date.year()) + "/" +
+        QString::number(date.year() + 1);
+  }
+  QString subjectName = subjectEdit->currentText();
+  QString troopName = troopEdit->currentText();
+  for (int i = 0; i < groupIds.length(); ++i) {
+    QString grade = groupNames.at(i).split("-").at(1).split(" ").at(0);
+    if (grade.length() == 4) {
+      grade = grade.left(2);
+      grade = QString::number(
+            QDate::currentDate().year() - QString("20" + grade).toInt());
+    } else {
+      grade = QString(grade.at(0));
+    }
+    if (!DocumentGenerator::generateExamList(
+          QApplication::applicationDirPath() + "/vedomost.docx",
+          directoryToSaveLists + "/vedomost_" + troopName + "_" + subjectName +
+          "_" + groupIds.at(i).toString() + ".docx", semester, year,
+          facultyNames.at(i), troopName, grade, militaryProfession,
+          subjectName, teacherEdit->currentText(),
+          date, students.at(i))) {
+      emit error(tr("При генерации ведомости возникла ошибка"));
+      return;
+    }
+  }
 }
 
 void EvaluationWidget::onEvaluationSelected(QModelIndex selection) {

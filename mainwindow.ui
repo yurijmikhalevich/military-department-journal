@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Журнал военной кафедры «КубГАУ»</string>
+   <string>Журнал военной кафедры</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
@@ -63,7 +63,15 @@
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Справка</string>
+    </property>
+    <addaction name="action_AboutQt"/>
+    <addaction name="action_Contat"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_New">
@@ -96,6 +104,16 @@
    </property>
    <property name="toolTip">
     <string>Импортировать…</string>
+   </property>
+  </action>
+  <action name="action_AboutQt">
+   <property name="text">
+    <string>О &amp;Qt</string>
+   </property>
+  </action>
+  <action name="action_Contat">
+   <property name="text">
+    <string>&amp;Контакты</string>
    </property>
   </action>
  </widget>

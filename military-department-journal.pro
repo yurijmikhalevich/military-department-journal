@@ -84,7 +84,8 @@ TRANSLATIONS += linguas_ru.ts
 
 OTHER_FILES = \
     README.md \
-    LICENSE.md
+    LICENSE.md \
+    vedomost.docx
 
 include(qt4table-steroids/qt4table-steroids.pri)
 include(docx-replacer/docx-replacer.pri)

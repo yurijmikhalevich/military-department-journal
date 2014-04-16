@@ -7,6 +7,7 @@
 #include <QTabWidget>
 #include <QSettings>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "database.h"
 #include "widgets/basewidget.h"
@@ -18,9 +19,6 @@
 #include "widgets/subjectwidget.h"
 #include "widgets/evaluationwidget.h"
 #include "widgets/universityfacultywidget.h"
-
-//#include <QDate>
-//#include "documentgenerator.h"
 #include "csvoldformatconverter.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,23 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
           this, SLOT(onCurrentTabChanged(int)));
   tabWidget->hide();
   ui->centralWidget->layout()->addWidget(tabWidget);
-//    DocumentGenerator::generateExamList("/home/39/stuff/vboxshare/vedomost.docx",
-//                                        "/home/39/stuff/vboxshare/vedomost_patched.docx", "II", "2012/2013",
-//                                        "Механизации", "МХ-41", "4", "560100",
-//                                        "Управление подразделениями в мирное время", "п-п/к запаса Стешенко А.Ф.",
-//                                        QDate::currentDate(),
-//    { "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
-//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
-//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович", "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович",
-//                                        "Василий Пупкин", "Иван Михайлович", "Ефистафий Арнольдович", "Вау вауфович" });
-//    QSettings settings(QApplication::applicationDirPath() + QDir::separator() + "settings.ini", QSettings::IniFormat);
-//    if (settings.contains("base")) {
-//        if (!Database::open(settings.value("base").toString())) {
-//            displayError(tr("Cannot open database"));
-//        } else {
-//            initControls();
-//        }
-//    }
 }
 
 MainWindow::~MainWindow() {
@@ -144,4 +125,23 @@ void MainWindow::on_action_Import_triggered() {
   } else {
     initControls();
   }
+}
+
+void MainWindow::on_action_AboutQt_triggered() {
+  QMessageBox::aboutQt(this, tr("О Qt"));
+}
+
+void MainWindow::on_action_Contat_triggered() {
+  QMessageBox::about(
+        this, tr("Контакты"),
+        tr("Исходный код данного приложения распространяется на условиях"
+           " лицензии GPLv3 и доступен по адресу:"
+           " <a href=\"https://github.com/39dotyt/military-department-journal"
+           "\">https://github.com/39dotyt/military-department-journal</a>.<br/>"
+           "Оставить замечание можно в"
+           " разделе <a href=\"https://github.com/39dotyt/military-department-"
+           "journal/issues\">Issues (Проблемы)</a>.<br/>"
+           "Связаться с разработчиком программы напрямую можно по e-mail:"
+           " <a href=\"mailto:0@39.yt\">0@39.yt</a>.<br/>"
+           "Юрий Михалевич"));
 }

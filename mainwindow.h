@@ -23,6 +23,10 @@ private slots:
 
   void on_action_Import_triggered();
 
+  void on_action_AboutQt_triggered();
+
+  void on_action_Contat_triggered();
+
 private:
   Ui::MainWindow *ui;
   QTabWidget *tabWidget;

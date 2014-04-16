@@ -38,6 +38,12 @@ QLayout *StudentWidget::createControlsLayout() {
   lastnameAccusativeEdit = new QLineEdit(this);
   firstnameAccusativeEdit = new QLineEdit(this);
   middlenameAccusativeEdit = new QLineEdit(this);
+  for (QLineEdit *le : {lastnameEdit, firstnameEdit, middlenameEdit,
+       lastnameDatumEdit, firstnameDatumEdit, middlenameDatumEdit,
+       lastnameAccusativeEdit, firstnameAccusativeEdit,
+       middlenameAccusativeEdit}) {
+    le->setMinimumWidth(80);
+  }
   QLabel *lastname = new QLabel(tr("Фамилия"));
   QLabel *firstname = new QLabel(tr("Имя"));
   QLabel *middlename = new QLabel(tr("Отчество"));
