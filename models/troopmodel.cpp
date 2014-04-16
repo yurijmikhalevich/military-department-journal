@@ -181,21 +181,21 @@ QString TroopModel::prepareName(QString troopName, QDate dateEntered,
 void TroopModel::fillTroops() {
   QSqlQuery query = QSqlQuery(troops);
   if (!query.exec("CREATE TABLE troop (id INTEGER PRIMARY KEY,"
-                  " name TEXT NOT NULL)") ||
+                  " name TEXT NOT NULL,"
+                  " graduated_from_military_department_date DATE)") ||
       !query.exec("CREATE INDEX troop_index ON troop (name)")) {
     throw query.lastError();
   }
-  QSqlQuery defaultQuery;
-  if (!defaultQuery.exec("SELECT id, name,"
+  query = QSqlQuery();
+  if (!query.exec("SELECT id, name,"
                          " entered_at_military_department_date,"
                          " graduated_from_military_department_date"
                          " FROM troop")) {
     throw query.lastError();
   }
-  query.prepare("INSERT INTO troop (id, name) VALUES (?, ?)");
   QSqlRecord row;
-  while (defaultQuery.next()) {
-    row = defaultQuery.record();
+  while (query.next()) {
+    row = query.record();
     addRecord(row.value("id").toInt(),
     {{"name", row.value("name")},
      {"entered_at_military_department_date",
@@ -207,13 +207,15 @@ void TroopModel::fillTroops() {
 
 void TroopModel::addRecord(int id, QVariantMap record) {
   QSqlQuery query = QSqlQuery(troops);
-  query.prepare("INSERT OR REPLACE INTO troop (id, name) VALUES (?, ?)");
+  query.prepare("INSERT OR REPLACE INTO troop (id, name,"
+                " graduated_from_military_department_date) VALUES (?, ?, ?)");
   query.addBindValue(id);
   query.addBindValue(
         prepareName(
           record.value("name").toString(),
           record.value("entered_at_military_department_date").toDate(),
           record.value("graduated_from_military_department_date").toDate()));
+  query.addBindValue(record.value("graduated_from_military_department_date"));
   if (!query.exec()) {
     throw query.lastError();
   }

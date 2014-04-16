@@ -333,7 +333,8 @@ QWidget *ValueDelegate::createEditor(
     QWidget *parent, const QStyleOptionViewItem &option,
     const QModelIndex &index) const {
   return new TableSteroids::RelationalComboBox(
-        "mark_value", "name", QSqlDatabase::defaultConnection, parent);
+        "mark_value", "name", {{"order", "id"}},
+        QSqlDatabase::defaultConnection, parent);
 }
 
 void ValueDelegate::setEditorData(
