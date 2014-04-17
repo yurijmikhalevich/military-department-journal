@@ -11,6 +11,7 @@
 #include <QString>
 #include <QSqlRelationalDelegate>
 #include "models/studentmodel.h"
+#include "qt4table-steroids/datedelegate.h"
 
 StudentWidget::StudentWidget(QWidget *parent)
     : BaseWidget(parent) {
@@ -73,14 +74,12 @@ QLayout *StudentWidget::createControlsLayout() {
   QFormLayout *secondRowLayout = new QFormLayout();
   decreeEnrollmentNumberEdit = new QLineEdit(this);
   QHBoxLayout *dobLayout = new QHBoxLayout();
-  dobEdit = new QDateEdit(this);
-  QToolButton *dobButton = new QToolButton(this);
-  QCalendarWidget *calendar = new QCalendarWidget();
-  calendar->hide();
-  connect(calendar, SIGNAL(activated(QDate)), dobEdit, SLOT(setDate(QDate)));
-  connect(dobButton, SIGNAL(clicked()), calendar, SLOT(show()));
+  QDate defaultDate = QDate(QDate::currentDate().year() - 19, 1, 1);
+  DateDelegate *dobDelegate = new DateDelegate(
+        defaultDate, this, QDate(1900, 1, 1), QDate::currentDate());
+  view->setItemDelegateForColumn(10, dobDelegate);
+  dobEdit = static_cast<QDateEdit *>(dobDelegate->createEditor(this));
   dobLayout->addWidget(dobEdit);
-  dobLayout->addWidget(dobButton);
   secondRowLayout->addRow(tr("Приказ о зачислении"),
                           decreeEnrollmentNumberEdit);
   secondRowLayout->addRow(tr("Дата рождения"), dobLayout);
