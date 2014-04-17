@@ -1,10 +1,10 @@
 #include "militaryprofessionwidget.h"
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include "qt4table-steroids/lineeditdelegate.h"
 #include "qt4table-steroids/sqluniquesteroidsvalidator.h"
 #include "qt4table-steroids/booleancomboboxdelegate.h"
 #include "models/militaryprofessionmodel.h"
-#include <QSqlQuery>
-#include <QSqlError>
 
 MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent)
     : BaseWidget(parent),
@@ -82,7 +82,23 @@ void MilitaryProfessionWidget::addNewProfession() {
   if (code.isEmpty() || name.isEmpty()) {
     return;
   }
-  if (insertRecord({{"code", code}, {"name", name}}) != -1) {
+  int newProfessionId = insertRecord({{"code", code}, {"name", name}});
+  if (newProfessionId != -1) {
+    QSqlQuery selectQuery;
+    selectQuery.prepare("SELECT id FROM subject");
+    if (!execQuery(selectQuery)) {
+      return;
+    }
+    QSqlQuery insertQuery;
+    insertQuery.prepare("INSERT INTO subject_duration (subject_id,"
+                        " military_profession_id, duration) VALUES (?, ?, 0)");
+    while (selectQuery.next()) {
+      insertQuery.addBindValue(selectQuery.record().value("id"));
+      insertQuery.addBindValue(newProfessionId);
+      if (!execQuery(insertQuery)) {
+        return;
+      }
+    }
     codeEdit->clear();
     nameEdit->clear();
     codeEdit->setFocus();
