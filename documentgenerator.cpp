@@ -3,8 +3,10 @@
 #include <QMap>
 #include "docx-replacer/docxreplacer.h"
 
-const QStringList DocumentGenerator::months = { "январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь",
-                                           "ноябрь", "декабрь" };
+const QStringList DocumentGenerator::months = {
+  "январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август",
+  "сентябрь", "октябрь", "ноябрь", "декабрь"
+};
 
 const QString DocumentGenerator::studentLine = ""
         "            <w:tr w:rsidR=\"00917019\" w:rsidRPr=\"00917019\" w:rsidTr=\"00917019\">"
@@ -242,31 +244,32 @@ const QString DocumentGenerator::studentLine = ""
         "                </w:tc>"
         "            </w:tr>";
 
-bool DocumentGenerator::generateExamList(QString examListBlankPath, QString resultFilePath, QString semestr,
-                                         QString academicYear, QString faculty, QString group, QString grade,
-                                         QString prof, QString subject, QString teacher, QDate date,
-                                         QStringList students)
-{
-    QMap<QString, QString> *replaceRules = new QMap<QString, QString>();
-    replaceRules->insert("SEMESTR", semestr);
-    replaceRules->insert("AYEAR", academicYear);
-    replaceRules->insert("FACULTY", faculty);
-    replaceRules->insert("GROUP", group);
-    replaceRules->insert("GRADE", grade);
-    replaceRules->insert("PROF", prof);
-    replaceRules->insert("SUBJECT", subject);
-    replaceRules->insert("TEACHER", teacher);
-    replaceRules->insert("DD", QString::number(date.day()));
-    replaceRules->insert("MONTH", months.at(date.month() - 1));
-    replaceRules->insert("YEAR", QString::number(date.year()));
-    QStringList studentLines;
-    QString bufLine;
-    for (int i = 0; i < students.count(); ++i) {
-        bufLine = studentLine;
-        bufLine.replace("NN", QString::number(i + 1));
-        bufLine.replace("Lastname F.M.", students.at(i));
-        studentLines.append(bufLine);
-    }
-    replaceRules->insert("STUDENTS", studentLines.join("\n"));
-    return DocxReplacer::replaceInFile(examListBlankPath, replaceRules, resultFilePath);
+bool DocumentGenerator::generateExamList(
+    QString examListBlankPath, QString resultFilePath, QString semestr,
+    QString academicYear, QString faculty, QString troop, QString grade,
+    QString prof, QString subject, QString teacher, QDate date,
+    QStringList students) {
+  QMap<QString, QString> *replaceRules = new QMap<QString, QString>();
+  replaceRules->insert("SEMESTR", semestr);
+  replaceRules->insert("AYEAR", academicYear);
+  replaceRules->insert("FACULTY", faculty);
+  replaceRules->insert("TROOP", troop);
+  replaceRules->insert("GRADE", grade);
+  replaceRules->insert("PROF", prof);
+  replaceRules->insert("SUBJECT", subject);
+  replaceRules->insert("TEACHER", teacher);
+  replaceRules->insert("DD", QString::number(date.day()));
+  replaceRules->insert("MONTH", months.at(date.month() - 1));
+  replaceRules->insert("YEAR", QString::number(date.year()));
+  QStringList studentLines;
+  QString bufLine;
+  for (int i = 0; i < students.count(); ++i) {
+    bufLine = studentLine;
+    bufLine.replace("NN", QString::number(i + 1));
+    bufLine.replace("Lastname F.M.", students.at(i));
+    studentLines.append(bufLine);
+  }
+  replaceRules->insert("STUDENTS", studentLines.join("\n"));
+  return DocxReplacer::replaceInFile(
+        examListBlankPath, replaceRules, resultFilePath);
 }

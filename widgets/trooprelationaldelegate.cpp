@@ -1,4 +1,5 @@
 #include "trooprelationaldelegate.h"
+#include <QDate>
 #include "qt4table-steroids/relationalcombobox.h"
 
 TroopRelationalDelegate::TroopRelationalDelegate(QObject *parent)
@@ -8,8 +9,11 @@ TroopRelationalDelegate::TroopRelationalDelegate(QObject *parent)
 QWidget *TroopRelationalDelegate::createEditor(
     QWidget *parent, const QStyleOptionViewItem &option,
     const QModelIndex &index) const {
-  return new TableSteroids::RelationalComboBox("troop", "name", "troops",
-                                               parent);
+  return new TableSteroids::RelationalComboBox(
+        "troop", "name", {{"where",
+                           "graduated_from_military_department_date > '" +
+                           QDate::currentDate().toString("yyyy-MM-dd") + "'"}},
+        "troops", parent);
 }
 
 void TroopRelationalDelegate::setEditorData(

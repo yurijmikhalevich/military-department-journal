@@ -68,7 +68,7 @@ void MilitaryProfessionWidget::invalidName(QString &input) {
 
 void MilitaryProfessionWidget::newInputChanged(QString) {
   QString code = codeEdit->text().simplified();
-  QString name = codeEdit->text().simplified();
+  QString name = nameEdit->text().simplified();
   if (!code.isEmpty() && !name.isEmpty()) {
     addNewButton->setEnabled(true);
   } else {
@@ -78,7 +78,7 @@ void MilitaryProfessionWidget::newInputChanged(QString) {
 
 void MilitaryProfessionWidget::addNewProfession() {
   QString code = codeEdit->text().simplified();
-  QString name = codeEdit->text().simplified();
+  QString name = nameEdit->text().simplified();
   if (code.isEmpty() || name.isEmpty()) {
     return;
   }
