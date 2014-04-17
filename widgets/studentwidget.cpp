@@ -51,9 +51,9 @@ QLayout *StudentWidget::createControlsLayout() {
   QHBoxLayout *controlsLayout = new QHBoxLayout();
   QFormLayout *nameLayout = new QFormLayout();
   QHBoxLayout *headerLayout = new QHBoxLayout();
-  headerLayout->addWidget(middlename);
-  headerLayout->addWidget(firstname);
   headerLayout->addWidget(lastname);
+  headerLayout->addWidget(firstname);
+  headerLayout->addWidget(middlename);
   nameLayout->addRow(nullptr, headerLayout);
   QHBoxLayout *nominativeLayout = new QHBoxLayout();
   nominativeLayout->addWidget(lastnameEdit);

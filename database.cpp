@@ -203,6 +203,38 @@ bool Database::init(const QString fileName, const bool test) {
   }
   return true;
 }
+#include <QSqlDriver>
+#include <sqlite3.h>
+#include <QRegularExpression>
+
+//static void likeFunc(
+//  sqlite3_context *context,
+//  int argc,
+//  sqlite3_value **argv
+//){
+//  const unsigned char *zA = sqlite3_value_text(argv[0]);
+//  const unsigned char *zB = sqlite3_value_text(argv[1]);
+//  int escape = 0;
+//  if( argc==3 ){
+//    /* The escape character string must consist of a single UTF-8 character.
+//    ** Otherwise, return an error.
+//    */
+//    const unsigned char *zEsc = sqlite3_value_text(argv[2]);
+////    if( sqlite3utf8CharLen(zEsc, -1)!=1 ){
+////      sqlite3_result_error(context,
+////          "ESCAPE expression must be a single character", -1);
+////      return;
+////    }
+////    escape = sqlite3ReadUtf8(zEsc);
+//  }
+//  if( zA && zB ){
+//    struct compareInfo *pInfo = sqlite3_user_data(context);
+//#ifdef SQLITE_TEST
+//    sqlite3_like_count++;
+//#endif
+//    sqlite3_result_int(context, patternCompare(zA, zB, pInfo, escape));
+//  }
+//}
 
 bool Database::open(const QString fileName) {
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -214,11 +246,39 @@ bool Database::open(const QString fileName) {
   for (auto queryString : {"PRAGMA page_size = 4096",
        "PRAGMA cache_size = -16384", "PRAGMA temp_store = MEMORY",
        "PRAGMA journal_mode = OFF", "PRAGMA locking_mode = EXCLUSIVE",
-       "PRAGMA synchronous = OFF"}) {
+       "PRAGMA synchronous = OFF", "PRAGMA case_sensitive_like = OFF"}) {
     if (!query.exec(queryString)) {
       return false;
     }
   }
+
+  QVariant v = db.driver()->handle();
+  if (!v.isValid() || qstrcmp(v.typeName(), "sqlite3*") != 0) {
+  qWarning() << "Cannot get a sqlite3 handle to the driver.";
+  return false;
+  }
+
+  // Create a handler and attach functions.
+  sqlite3* handler = *static_cast<sqlite3**>(v.data());
+  if (!handler) {
+  qWarning() << "Cannot get a sqlite3 handler.";
+  return false;
+  }
+
+  // Check validity of the state.
+//  if (!db.isValid()) {
+//  qCritical() << "Cannot create SQLite custom functions: db object is not valid.";
+//  return false;
+//  }
+
+//  if (!db.isOpen()) {
+//  qCritical() << "Cannot create SQLite custom functions: db object is not open.";
+//  return false;
+//  }
+
+//  if (sqlite3_create_function(handler, "like", 1, SQLITE_ANY, 0, likeFunc, 0, 0))
+//  qCritical() <<"Cannot create SQLite functions: sqlite3_create_function failed.";
+
   return true;
 }
 

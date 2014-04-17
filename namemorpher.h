@@ -8,8 +8,7 @@
 /**
  * @brief The NameMorpher class
  */
-class NameMorpher : public QObject
-{
+class NameMorpher : public QObject {
   Q_OBJECT
 public:
   struct MorphedName {
@@ -23,10 +22,8 @@ public:
   explicit NameMorpher(QObject *parent = 0);
   MorphedName getMorphedName(QString lastname, QString firstname,
                              QString middlename, bool fake = false);
-
 private:
   QNetworkAccessManager *networkManager;
-
 };
 
 #endif // NAMEMORPHER_H
