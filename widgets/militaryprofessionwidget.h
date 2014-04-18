@@ -20,10 +20,14 @@ private:
   QLineEdit *nameEdit;
   QPushButton *addNewButton;
   QCheckBox *showArchivedCheckBox;
+  bool isNameInvalid;
+  bool isCodeInvalid;
 private slots:
   void invalidCode(QString &input);
   void invalidName(QString &input);
-  void newInputChanged(QString input);
+  void validCode(QString &input);
+  void validName(QString &input);
+  void checkButtonState();
   void addNewProfession();
 };
 

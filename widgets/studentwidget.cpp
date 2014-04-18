@@ -51,9 +51,9 @@ QLayout *StudentWidget::createControlsLayout() {
   QHBoxLayout *controlsLayout = new QHBoxLayout();
   QFormLayout *nameLayout = new QFormLayout();
   QHBoxLayout *headerLayout = new QHBoxLayout();
-  headerLayout->addWidget(middlename);
-  headerLayout->addWidget(firstname);
   headerLayout->addWidget(lastname);
+  headerLayout->addWidget(firstname);
+  headerLayout->addWidget(middlename);
   nameLayout->addRow(nullptr, headerLayout);
   QHBoxLayout *nominativeLayout = new QHBoxLayout();
   nominativeLayout->addWidget(lastnameEdit);
@@ -86,7 +86,11 @@ QLayout *StudentWidget::createControlsLayout() {
   controlsLayout->addLayout(secondRowLayout);
   QFormLayout *thirdRowLayout = new QFormLayout();
   universityGroupEdit =
-      new TableSteroids::RelationalComboBox("university_group", "name");
+      new TableSteroids::RelationalComboBox(
+        "university_group", "name",
+        {{"where", "graduated_from_university_year >= " +
+          QString::number(QDate::currentDate().year())}});
+  universityGroupEdit->setMinimumWidth(120);
   thirdRowLayout->addRow(tr("Группа"), universityGroupEdit);
   controlsLayout->addLayout(thirdRowLayout);
   addStudentButton = new QPushButton(tr("Добавить студента"));

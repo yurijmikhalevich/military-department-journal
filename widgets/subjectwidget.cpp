@@ -31,7 +31,7 @@ SubjectWidget::SubjectWidget(QWidget *parent)
                                    tr("В архиве"), tr("Действителен"), view));
   QHBoxLayout *controlsLayout = new QHBoxLayout();
   SQLUniqueSteroidsValidator *subjectNameValidator =
-      new SQLUniqueSteroidsValidator("subject", "name", this);
+      new SQLUniqueSteroidsValidator("subject", "name", true, this);
   LineEditDelegate *subjectNameDelegate =
       new LineEditDelegate(subjectNameValidator, this);
   view->setItemDelegateForColumn(2, subjectNameDelegate);

@@ -24,7 +24,7 @@ UniversityGroupWidget::UniversityGroupWidget(QWidget *parent)
   mainLayout->addWidget(view);
   view->setItemDelegateForColumn(3, new SteroidsRelationalDelegate(view));
   SQLUniqueSteroidsValidator *groupNameValidator =
-      new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
+      new SQLUniqueSteroidsValidator(model->tableName(), "name", true, this);
   connect(groupNameValidator, SIGNAL(invalidInput(QString &)),
           this, SLOT(invalidInputReceived(QString &)));
   LineEditDelegate *groupNameDelegate =
