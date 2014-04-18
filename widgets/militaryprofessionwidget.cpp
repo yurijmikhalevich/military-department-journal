@@ -8,6 +8,8 @@
 
 MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent)
     : BaseWidget(parent),
+      isNameInvalid(true),
+      isCodeInvalid(true),
       controlsLayout(new QHBoxLayout()),
       mainLayout(new QVBoxLayout(this)),
       showArchivedCheckBox(
@@ -19,13 +21,9 @@ MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent)
   connect(showArchivedCheckBox, SIGNAL(clicked(bool)),
           model, SLOT(showArchived(bool)));
   SQLUniqueSteroidsValidator *codeValidator =
-      new SQLUniqueSteroidsValidator(model->tableName(), "code", this);
+      new SQLUniqueSteroidsValidator(model->tableName(), "code", true, this);
   SQLUniqueSteroidsValidator *nameValidator =
-      new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
-  connect(codeValidator, SIGNAL(invalidInput(QString &)),
-          this, SLOT(invalidCode(QString &)));
-  connect(nameValidator, SIGNAL(invalidInput(QString &)),
-          this, SLOT(invalidName(QString &)));
+      new SQLUniqueSteroidsValidator(model->tableName(), "name", true, this);
   LineEditDelegate *codeDelegate = new LineEditDelegate(codeValidator, this);
   LineEditDelegate *nameDelegate = new LineEditDelegate(nameValidator, this);
   view->setItemDelegateForColumn(
@@ -42,10 +40,14 @@ MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent)
   connect(codeEdit, SIGNAL(returnPressed()), nameEdit, SLOT(setFocus()));
   connect(nameEdit, SIGNAL(returnPressed()), this, SLOT(addNewProfession()));
   connect(addNewButton, SIGNAL(clicked()), this, SLOT(addNewProfession()));
-  connect(codeEdit, SIGNAL(textChanged(QString)),
-          this, SLOT(newInputChanged(QString)));
-  connect(nameEdit, SIGNAL(textChanged(QString)),
-          this, SLOT(newInputChanged(QString)));
+  connect(codeValidator, SIGNAL(invalidInput(QString &)),
+          this, SLOT(invalidCode(QString &)));
+  connect(nameValidator, SIGNAL(invalidInput(QString &)),
+          this, SLOT(invalidName(QString &)));
+  connect(codeValidator, SIGNAL(validInput(QString &)),
+          this, SLOT(validCode(QString &)));
+  connect(nameValidator, SIGNAL(validInput(QString &)),
+          this, SLOT(validName(QString &)));
   controlsLayout->addWidget(codeEdit);
   controlsLayout->addWidget(nameEdit);
   controlsLayout->addWidget(addNewButton);
@@ -57,31 +59,44 @@ MilitaryProfessionWidget::MilitaryProfessionWidget(QWidget *parent)
   view->setColumnWidth(3, 270);
 }
 
-void MilitaryProfessionWidget::invalidCode(QString &input) {
-  emit error(
-        QString("Специальность под номером «%1» уже существует").arg(input));
-}
-
-void MilitaryProfessionWidget::invalidName(QString &input) {
-  emit error(QString("Специальность с именем «%1» уже существует").arg(input));
-}
-
-void MilitaryProfessionWidget::newInputChanged(QString) {
-  QString code = codeEdit->text().simplified();
-  QString name = nameEdit->text().simplified();
-  if (!code.isEmpty() && !name.isEmpty()) {
-    addNewButton->setEnabled(true);
-  } else {
-    addNewButton->setDisabled(true);
+void MilitaryProfessionWidget::invalidCode(QString &) {
+  emit error(tr("Введён неверный или уже существующий номер специальности"));
+  if (codeEdit->hasFocus()) {
+    isCodeInvalid = true;
+    checkButtonState();
   }
+}
+
+void MilitaryProfessionWidget::invalidName(QString &) {
+  emit error(tr("Введено неверное или уже существующее название"
+                " специальности"));
+  if (nameEdit->hasFocus()) {
+    isNameInvalid = true;
+    checkButtonState();
+  }
+}
+
+void MilitaryProfessionWidget::validCode(QString &) {
+  if (codeEdit->hasFocus()) {
+    isCodeInvalid = false;
+    checkButtonState();
+  }
+}
+
+void MilitaryProfessionWidget::validName(QString &) {
+  if (nameEdit->hasFocus()) {
+    isNameInvalid = false;
+    checkButtonState();
+  }
+}
+
+void MilitaryProfessionWidget::checkButtonState() {
+  addNewButton->setDisabled(isCodeInvalid || isNameInvalid);
 }
 
 void MilitaryProfessionWidget::addNewProfession() {
   QString code = codeEdit->text().simplified();
   QString name = nameEdit->text().simplified();
-  if (code.isEmpty() || name.isEmpty()) {
-    return;
-  }
   int newProfessionId = insertRecord({{"code", code}, {"name", name}});
   if (newProfessionId != -1) {
     QSqlQuery selectQuery;

@@ -18,7 +18,7 @@ UniversityFacultyWidget::UniversityFacultyWidget(QWidget *parent)
   mainLayout->addWidget(showArchivedCheckBox);
   mainLayout->addWidget(view);
   SQLUniqueSteroidsValidator *facultyNameValidator =
-      new SQLUniqueSteroidsValidator(model->tableName(), "name", this);
+      new SQLUniqueSteroidsValidator(model->tableName(), "name", true, this);
   connect(facultyNameValidator, SIGNAL(invalidInput(QString &)),
           this, SLOT(invalidInputReceived(QString &)));
   LineEditDelegate *facultyNameDelegate =
