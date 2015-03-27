@@ -61,9 +61,8 @@ void TroopWidget::addTroop() {
   }
   if (insertRecord({{"name", name}, {"entered_at_military_department_date",
                    enteredInEdit->date()},
-  {"curator_id", curatorEdit->itemData(curatorEdit->currentIndex())},
-  {"military_profession_id",
-                   professionEdit->itemData(professionEdit->currentIndex())}})
+  {"curator_id", curatorEdit->currentIndex()},
+  {"military_profession_id", professionEdit->currentIndex()}})
       != -1)
   {
     nameEdit->setTroopName("-<N:2>1");
