@@ -204,7 +204,7 @@ bool Database::init(const QString fileName, const bool test) {
   return true;
 }
 #include <QSqlDriver>
-#include <sqlite3.h>
+//#include <sqlite3.h>
 #include <QRegularExpression>
 
 //static void likeFunc(
@@ -259,11 +259,11 @@ bool Database::open(const QString fileName) {
   }
 
   // Create a handler and attach functions.
-  sqlite3* handler = *static_cast<sqlite3**>(v.data());
-  if (!handler) {
-  qWarning() << "Cannot get a sqlite3 handler.";
-  return false;
-  }
+  //sqlite3* handler = *static_cast<sqlite3**>(v.data());
+  //if (!handler) {
+  //qWarning() << "Cannot get a sqlite3 handler.";
+  //return false;
+  //}
 
   // Check validity of the state.
 //  if (!db.isValid()) {

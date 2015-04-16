@@ -58,7 +58,7 @@ void MainWindow::on_action_New_triggered() {
   if (fileName.isEmpty()) {
     return;
   }
-  if (!Database::init(fileName, true)) {
+  if (!Database::init(fileName, false)) {
     displayError(tr("Невозможно инициализировать журнал"));
   } else {
     initControls();
