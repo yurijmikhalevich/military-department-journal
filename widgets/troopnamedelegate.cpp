@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QSqlTableModel>
 #include <QSqlRecord>
+#include <functional>
 
 TroopNameDelegate::TroopNameDelegate(QObject *parent)
     : QStyledItemDelegate(parent) {
